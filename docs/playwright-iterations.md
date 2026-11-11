@@ -127,6 +127,13 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 
 ## Iteración 6 · Cuentas (M)
 
+**Estado:** completada. E2E-01 en `tests/ui/e2e/accounts/open-account.spec.ts` y API-ACC-01 en `tests/api/component/accounts/accounts.spec.ts`. Decisiones:
+
+- **Actores** en `src/fixtures/actors.ts`: `customer` (registro y token por API), `customerSession` (además inicia sesión por la UI), `operatorClient` y los `AccountsApi` de cada uno. `base.ts` une las fixtures independientes y `actors.ts` se construye encima.
+- `apiClient` crea su propio contexto con `playwright.request.newContext({ baseURL: API_URL })`: la fixture nativa `request` usa el `baseURL` del proyecto, que en los proyectos de UI es el frontend.
+- El diálogo "Open an account" es un componente compartido (`src/pages/components/create-account-dialog`).
+- E2E-01 verifica en la UI y confirma con la API que la cuenta existe con el mismo número.
+
 **Objetivo:** primera e2e con datos preparados por API.
 
 | #   | Tarea                                                                                                                 | Criterio de terminado                                 |
