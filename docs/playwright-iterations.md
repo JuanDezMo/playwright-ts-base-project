@@ -49,6 +49,8 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 
 ## Iteración 1 · Primera prueba de API · componente: API-AUTH-01 (S)
 
+**Estado:** completada. La prueba está en `tests/api/component/auth/login.spec.ts`; las pruebas importan desde `@/fixtures` (alias `@/` → `src/`). 6 ejecuciones seguidas pasan sin 429 (~130 ms cada una).
+
 **Objetivo:** el patrón de una prueba de API con el escenario más simple: login con credenciales inválidas.
 
 | #   | Tarea                                                                                                              | Criterio de terminado                                                                             |

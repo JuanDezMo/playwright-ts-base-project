@@ -16,7 +16,8 @@ Automated tests with [Playwright](https://playwright.dev) for **Banking Test Lab
 | Iteration | Status |
 | --- | --- |
 | 0 · Base project | ✅ Done: structure, config, smoke test `SMOKE-01` |
-| 1 · First API component test (API-AUTH-01) | Next |
+| 1 · First API component test (API-AUTH-01) | ✅ Done: `ApiClient`, `AuthApi`, `authApi` fixture, `uniqueEmail()` |
+| 2 · First UI component test (C-03) | Next |
 
 ## Requirements
 
@@ -57,11 +58,11 @@ playwright_base_project/
 ├─ playwright.config.ts     # one project per test type (only api-component so far)
 ├─ src/
 │  ├─ config/env.ts         # URLs and seed credentials
-│  ├─ api/                  # API clients (iteration 1)
+│  ├─ api/                  # API clients: ApiClient, AuthApi
 │  ├─ pages/                # Locators + Actions per screen (iteration 2)
 │  ├─ mocks/                # page.route handlers (iteration 2)
-│  ├─ fixtures/             # dependency injection for tests (iteration 1)
-│  └─ data/                 # unique test data factories (iteration 1)
+│  ├─ fixtures/             # dependency injection: import { test, expect } from '@/fixtures'
+│  └─ data/                 # unique test data factories
 ├─ tests/
 │  ├─ setup/                # session per role (storageState, iteration 3)
 │  ├─ ui/component/         # screen + mocked API

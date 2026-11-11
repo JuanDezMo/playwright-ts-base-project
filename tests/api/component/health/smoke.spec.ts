@@ -1,9 +1,8 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from '@/fixtures'
 
-// Prueba de humo (iteración 0): la API está levantada y protege sus endpoints.
-// Usa la fixture nativa `request`; los clientes de API llegan en la iteración 1.
-test('SMOKE-01 protected endpoint without token returns 401', async ({ request }) => {
-  const response = await request.get('/accounts')
+// Prueba de humo: la API está levantada y protege sus endpoints
+test('SMOKE-01 protected endpoint without token returns 401', async ({ apiClient }) => {
+  const response = await apiClient.get('/accounts')
 
   expect(response.status()).toBe(401)
   expect(await response.json()).toEqual({
