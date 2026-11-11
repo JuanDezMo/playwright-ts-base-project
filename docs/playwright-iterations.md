@@ -100,6 +100,8 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 
 ## Iteración 4 · Bloqueo de login: cuándo simular (S)
 
+**Estado:** completada. API-AUTH-03 en `tests/api/component/auth/login.spec.ts` y C-04 en `tests/ui/component/login/login.spec.ts`; comparativa 3 en `comparisons.md`. C-04 usa `page.clock` (`install` + `pauseAt` + `runFor`) para que la cuenta regresiva sea determinista; esto adelanta parte del concepto `page.clock`, pendiente en el plan.
+
 **Objetivo:** comparar un escenario costoso con la API real frente al mismo escenario simulado.
 
 | #   | Tarea                                                                                                                          | Criterio de terminado                                                  |

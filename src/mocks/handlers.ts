@@ -13,4 +13,15 @@ export const mockLogin = {
       }),
     )
   },
+
+  // 429 con Retry-After: el frontend lo usa para la cuenta regresiva
+  tooManyRequests: async (page: Page, retryAfterSeconds: number): Promise<void> => {
+    await page.route('**/api/auth/login', (route) =>
+      route.fulfill({
+        status: 429,
+        headers: { 'Retry-After': String(retryAfterSeconds) },
+        json: { code: 'TOO_MANY_REQUESTS', message: 'Too many login attempts' },
+      }),
+    )
+  },
 }

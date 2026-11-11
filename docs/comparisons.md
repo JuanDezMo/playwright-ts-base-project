@@ -48,17 +48,21 @@ Completada en la iteración 3 (medido el 2026-11-10, Chromium 158, en local).
 
 ## Comparativa 3: bloqueo tras 5 intentos
 
+Completada en la iteración 4 (medido el 2026-11-10, Chromium 158, en local).
+
 | Criterio | API-AUTH-03 (API · componente, API real) | C-04 (UI · componente, 429 simulado) |
 | --- | --- | --- |
-| Tipo de prueba | | |
-| Tiempo de ejecución (promedio de 5 ejecuciones) | | |
-| Líneas de la prueba (sin contar fixtures) | | |
-| Archivos que tuve que crear (Locators, Actions, mocks, clientes) | | |
-| ¿Necesita la API levantada? | | |
-| ¿Necesita el frontend levantado? | | |
-| ¿Deja estado en la base de datos? | | |
-| ¿Qué cambio la rompe? (mensaje, HTML, regla de negocio, contrato) | | |
-| ¿Qué error detecta que la otra no? | | |
-| ¿Es estable al repetirla 10 veces? | | |
+| Tipo de prueba | 6 llamadas reales a `POST /auth/login` con el mismo email | Pantalla de login con un 429 simulado y el reloj del navegador pausado (`page.clock`) |
+| Tiempo de ejecución (promedio de 5 ejecuciones) | **268 ms** (248–321): 6 peticiones | **993 ms** (985–1002) |
+| Líneas de la prueba (sin contar fixtures) | 17 | 16 |
+| Archivos que tuve que crear | Ninguno: reutiliza `AuthApi` y `uniqueEmail` | Ninguno nuevo: un handler (`tooManyRequests`) y dos localizadores (`lockoutAlert`, `lockoutCountdown`) |
+| ¿Necesita la API levantada? | Sí | No |
+| ¿Necesita el frontend levantado? | No | Sí |
+| ¿Deja estado en la base de datos? | **Sí**: 5 intentos fallidos y el email bloqueado 15 minutos. Por eso usa un email único | No |
+| ¿Qué cambio la rompe? | Cambiar el límite de intentos, la ventana, el estado 429, el cuerpo o el header `Retry-After` | Cambiar el texto de la alerta, el formato de la cuenta regresiva, el `role="timer"` o que el botón deje de deshabilitarse |
+| ¿Qué error detecta que la otra no? | Que el backend cuente mal los intentos o no envíe `Retry-After`: la **regla de negocio real** | Que la UI ignore `Retry-After`, no muestre la cuenta regresiva, no la haga avanzar o deje el botón activo |
+| ¿Es estable al repetirla 10 veces? | Sí (10/10), gracias al email único | Sí (10/10), solo después de pausar el reloj (ver nota) |
 
-**Conclusión** (2 o 3 líneas): ¿cuándo conviene simular la API y cuándo usar la real?
+**Conclusión:** provocar el bloqueo de verdad es posible y rápido por API, pero **deja estado** (un email bloqueado 15 minutos) y obliga a aislar datos. Para la UI conviene **simular**: el mock da el 429 al instante y `page.clock` controla el tiempo, sin depender del backend ni de esperas reales. Regla práctica: la regla de negocio se prueba con la API real; la reacción de la pantalla, con un mock.
+
+**Nota sobre `page.clock`:** `clock.install()` solo falsea el reloj; el tiempo **sigue corriendo** a velocidad real. La primera versión de C-04 usaba `runFor(5000)` y tardaba 5,4 s, porque cada tick de la cuenta regresiva programa el siguiente después de renderizar: `runFor` disparó un tick y los otros cuatro llegaron en tiempo real. Con `pauseAt` el tiempo se detiene, y `runFor(1000)` avanza exactamente un tick.

@@ -8,6 +8,8 @@ export class LoginLocators {
   readonly password: Locator
   readonly submitButton: Locator
   readonly errorAlert: Locator
+  readonly lockoutAlert: Locator
+  readonly lockoutCountdown: Locator
 
   // Los localizadores se crean en el constructor: si fueran campos con inicializador
   // (`readonly email = this.page.getByLabel(...)`), se evaluarían antes de que
@@ -18,5 +20,8 @@ export class LoginLocators {
     this.password = page.getByLabel('Password')
     this.submitButton = page.getByRole('button', { name: 'Sign in' })
     this.errorAlert = page.getByTestId('login-error-alert')
+    this.lockoutAlert = page.getByTestId('login-lockout-alert')
+    // La cuenta regresiva usa role="timer" (no anuncia cada segundo al lector de pantalla)
+    this.lockoutCountdown = page.getByRole('timer')
   }
 }

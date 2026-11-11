@@ -19,7 +19,8 @@ Automated tests with [Playwright](https://playwright.dev) for **Banking Test Lab
 | 1 · First API component test (API-AUTH-01) | ✅ Done: `ApiClient`, `AuthApi`, `authApi` fixture, `uniqueEmail()` |
 | 2 · First UI component test (C-03) | ✅ Done: login Locators/Actions, `page.route` mock, comparison 1 |
 | 3 · Successful login: API and e2e | ✅ Done: API-AUTH-02, E2E-00, health checks, saved operator session, comparison 2 |
-| 4 · Login lockout: when to mock | Next |
+| 4 · Login lockout: when to mock | ✅ Done: API-AUTH-03, C-04 with `page.clock`, comparison 3 |
+| 5 · Register | Next |
 
 ## Requirements
 
