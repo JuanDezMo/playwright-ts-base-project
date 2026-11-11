@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test'
 import { AccountsApi } from '../api/AccountsApi'
 import type { ApiClient } from '../api/ApiClient'
 import { OperatorApi } from '../api/OperatorApi'
+import { TransfersApi } from '../api/TransfersApi'
 import { env } from '../config/env'
 import { newCustomer } from '../data/factories'
 import { DashboardActions, DashboardLocators } from '../pages/dashboard'
@@ -24,6 +25,14 @@ export type CustomerBrowser = {
   dashboardUi: DashboardLocators
 }
 
+type AccountRef = { id: string; accountNumber: string }
+
+// Cliente con dos cuentas y saldo: ahorros con $1,000.00 y corriente con $0.00
+export type CustomerWithFunds = Customer & {
+  savings: AccountRef
+  checking: AccountRef
+}
+
 export type ActorFixtures = {
   // Cliente nuevo registrado por API (sin cuentas, sin sesión en el navegador)
   customer: Customer
@@ -35,6 +44,8 @@ export type ActorFixtures = {
   operatorAccountsApi: AccountsApi
   operatorApi: OperatorApi
   customerBrowser: CustomerBrowser
+  customerTransfersApi: TransfersApi
+  customerWithFunds: CustomerWithFunds
 }
 
 // Lee el access token de una respuesta de login; falla con un mensaje claro si no hay
@@ -68,6 +79,22 @@ export const test = base.extend<ActorFixtures>({
   },
   operatorApi: async ({ operatorClient }, use) => {
     await use(new OperatorApi(operatorClient))
+  },
+  customerTransfersApi: async ({ customer }, use) => {
+    await use(new TransfersApi(customer.client))
+  },
+  customerWithFunds: async ({ customer, customerAccountsApi, operatorApi }, use) => {
+    // Todo por API: rápido y sin depender de la UI
+    const open = async (type: 'savings' | 'checking'): Promise<AccountRef> => {
+      const response = await customerAccountsApi.create(type)
+      if (response.status() !== 201) throw new Error(`Create ${type} failed during setup: ${response.status()}`)
+      return (await response.json()) as AccountRef
+    }
+    const savings = await open('savings')
+    const checking = await open('checking')
+    const recharged = await operatorApi.recharge(savings.accountNumber, 100000, 'salary')
+    if (recharged.status() !== 201) throw new Error(`Recharge failed during setup: ${recharged.status()}`)
+    await use({ ...customer, savings, checking })
   },
   customerBrowser: async ({ browser, customer }, use) => {
     // Un contexto nuevo no hereda el baseURL del proyecto: se indica explícitamente

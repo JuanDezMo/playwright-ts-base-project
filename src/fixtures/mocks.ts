@@ -1,5 +1,6 @@
 import { test as base } from '@playwright/test'
-import { mockLogin, mockRecharge, mockRegister } from '../mocks/handlers'
+import { mockAccounts, mockLogin, mockRecharge, mockRegister, mockTransfer } from '../mocks/handlers'
+import type { MockAccount } from '../mocks/payloads'
 
 // Handlers de mocks ya ligados a la página de la prueba: mockApi.login.tooManyRequests(75)
 type MockApi = {
@@ -12,6 +13,12 @@ type MockApi = {
   }
   recharge: {
     success: (amountCents: number) => Promise<void>
+  }
+  accounts: {
+    list: (items: readonly MockAccount[]) => Promise<void>
+  }
+  transfer: {
+    insufficientFunds: () => Promise<void>
   }
 }
 
@@ -29,6 +36,12 @@ export const test = base.extend<MockFixtures>({
       },
       recharge: {
         success: (amountCents) => mockRecharge.success(page, amountCents),
+      },
+      accounts: {
+        list: (items) => mockAccounts.list(page, items),
+      },
+      transfer: {
+        insufficientFunds: () => mockTransfer.insufficientFunds(page),
       },
     })
   },

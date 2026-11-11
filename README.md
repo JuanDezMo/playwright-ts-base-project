@@ -23,7 +23,8 @@ Automated tests with [Playwright](https://playwright.dev) for **Banking Test Lab
 | 5 · Register | ✅ Done: register Locators/Actions, C-01, C-02, API-REG-01, API-REG-02 |
 | 6 · Accounts | ✅ Done: AccountsApi, dashboard and dialog page objects, actor fixtures, E2E-01, API-ACC-01 |
 | 7 · Recharge | ✅ Done: OperatorApi, operator page objects, fake session, C-07, C-08, E2E-02 (two browser contexts), API-RCH-01 |
-| 8 · Transfer | Next |
+| 8 · Transfer | ✅ Done: TransfersApi, transfer/dialog/detail page objects, `customerWithFunds`, C-05, C-06, E2E-03, API-TRF-01 |
+| 9 · Mocks from OpenAPI | Next |
 
 ## Requirements
 
@@ -66,9 +67,9 @@ playwright_base_project/
 ├─ playwright.config.ts     # health checks + auth setup, then api-component, ui-component, ui-e2e
 ├─ src/
 │  ├─ config/               # env.ts (URLs, seed credentials), sessions.ts (saved session files)
-│  ├─ api/                  # API clients: ApiClient, AuthApi, AccountsApi, OperatorApi, jwt
+│  ├─ api/                  # API clients: Auth, Accounts, Operator, Transfers (+ ApiClient, jwt)
 │  ├─ pages/                # Locators + Actions per screen and shared components (dialog)
-│  ├─ mocks/                # page.route handlers
+│  ├─ mocks/                # page.route handlers and coherent payloads
 │  ├─ fixtures/             # api, ui, mocks, session → base → actors (customer, operator)
 │  └─ data/                 # unique test data factories and fake sessions
 ├─ tests/

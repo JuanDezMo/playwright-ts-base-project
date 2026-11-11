@@ -165,6 +165,13 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 
 ## Iteración 8 · Transferencia (M)
 
+**Estado:** completada. C-05 y C-06 en `tests/ui/component/transfer/transfer.spec.ts`, E2E-03 en `tests/ui/e2e/transfers/own-accounts.spec.ts` y API-TRF-01 en `tests/api/component/transfers/transfers.spec.ts`. Decisiones:
+
+- Las pruebas de componente usan `asFakeCustomer` y simulan `GET /accounts` con datos coherentes de `src/mocks/payloads.ts` (el handler solo intercepta `GET` y deja pasar el resto con `route.fallback()`).
+- El diálogo de revisión es un componente compartido (`src/pages/components/confirm-transfer-dialog`); `TransferActions` separa `review()` y `confirm()`.
+- `customerWithFunds` prepara todo por API: ahorros con $1,000.00 (recarga de operador) y corriente con $0.00.
+- API-TRF-01 verifica además que el saldo de origen bajó **una sola vez**.
+
 **Objetivo:** cubrir la regla de negocio más crítica.
 
 | #   | Tarea                                                                                                                      | Criterio de terminado              |

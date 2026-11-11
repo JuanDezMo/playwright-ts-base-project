@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test'
+import type { MockAccount } from './payloads'
 
 // Respuestas simuladas de la API con page.route (nativo de Playwright).
 // El frontend llama a /api/* (su proxy hacia la API Go), por eso el patrón empieza con **/api.
@@ -52,6 +53,23 @@ export const mockRecharge = {
           createdAt: '2026-11-10T14:30:00.000Z',
         },
       }),
+    )
+  },
+}
+
+export const mockAccounts = {
+  // GET /accounts con la lista indicada (solo el listado; no intercepta /accounts/:id)
+  list: async (page: Page, items: readonly MockAccount[]): Promise<void> => {
+    await page.route('**/api/accounts', (route) =>
+      route.request().method() === 'GET' ? route.fulfill({ json: { items } }) : route.fallback(),
+    )
+  },
+}
+
+export const mockTransfer = {
+  insufficientFunds: async (page: Page): Promise<void> => {
+    await page.route('**/api/transfers', (route) =>
+      route.fulfill({ status: 422, json: { code: 'INSUFFICIENT_FUNDS', message: 'Insufficient funds' } }),
     )
   },
 }

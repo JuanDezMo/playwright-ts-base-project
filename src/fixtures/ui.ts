@@ -1,8 +1,10 @@
 import { test as base } from '@playwright/test'
+import { AccountDetailLocators } from '../pages/account-detail'
 import { DashboardActions, DashboardLocators } from '../pages/dashboard'
 import { LoginActions, LoginLocators } from '../pages/login'
 import { OperatorActions, OperatorLocators } from '../pages/operator'
 import { RegisterActions, RegisterLocators } from '../pages/register'
+import { TransferActions, TransferLocators } from '../pages/transfer'
 
 export type UiFixtures = {
   loginUi: LoginLocators
@@ -13,6 +15,9 @@ export type UiFixtures = {
   register: RegisterActions
   dashboardUi: DashboardLocators
   dashboard: DashboardActions
+  transferUi: TransferLocators
+  transfer: TransferActions
+  accountDetailUi: AccountDetailLocators
 }
 
 // Fixtures de UI: Locators y Actions de cada pantalla, conectados entre sí.
@@ -40,5 +45,14 @@ export const test = base.extend<UiFixtures>({
   },
   dashboard: async ({ page, dashboardUi }, use) => {
     await use(new DashboardActions(page, dashboardUi))
+  },
+  transferUi: async ({ page }, use) => {
+    await use(new TransferLocators(page))
+  },
+  transfer: async ({ page, transferUi }, use) => {
+    await use(new TransferActions(page, transferUi))
+  },
+  accountDetailUi: async ({ page }, use) => {
+    await use(new AccountDetailLocators(page))
   },
 })
