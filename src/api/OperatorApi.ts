@@ -1,8 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import type { APIResponse } from '@playwright/test'
+import type { RechargeType } from '../data/domain'
 import type { ApiClient } from './ApiClient'
-
-export type RechargeType = 'cash' | 'employer_bonus' | 'salary'
 
 // Endpoints del operador (F-08). Requiere un cliente con token de operador.
 export class OperatorApi {

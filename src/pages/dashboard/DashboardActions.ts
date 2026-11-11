@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test'
-import type { AccountType } from '@/api/AccountsApi'
+import type { AccountType } from '@/data/domain'
 import { CreateAccountDialogActions } from '../components/create-account-dialog'
 import type { DashboardLocators } from './DashboardLocators'
 

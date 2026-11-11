@@ -24,7 +24,8 @@ Automated tests with [Playwright](https://playwright.dev) for **Banking Test Lab
 | 6 · Accounts | ✅ Done: AccountsApi, dashboard and dialog page objects, actor fixtures, E2E-01, API-ACC-01 |
 | 7 · Recharge | ✅ Done: OperatorApi, operator page objects, fake session, C-07, C-08, E2E-02 (two browser contexts), API-RCH-01 |
 | 8 · Transfer | ✅ Done: TransfersApi, transfer/dialog/detail page objects, `customerWithFunds`, C-05, C-06, E2E-03, API-TRF-01 |
-| 9 · Mocks from OpenAPI | Next |
+| 9 · Mocks from OpenAPI | ✅ Done: `pnpm gen:mocks`, typed examples with `satisfies`, ESLint layer rules |
+| 10 · API e2e, smoke and mobile | Next |
 
 ## Requirements
 
@@ -56,9 +57,11 @@ Before the tests, `api-health` and `web-health` check that the services are up a
 | `pnpm test:ui:component` | UI component tests (needs the web app, not the API) |
 | `pnpm test:ui:e2e` | UI end-to-end tests (needs the web app and the API) |
 | `pnpm typecheck` | TypeScript check |
+| `pnpm lint` | ESLint, including the layer dependency rules |
+| `pnpm gen:mocks` | Regenerate `src/mocks/generated` and `src/mocks/api-types.ts` from `../accounts_api/openapi.yaml` (`OPENAPI_PATH` to override) |
 | `pnpm report` | Open the last HTML report |
 
-More scripts are added per iteration (`test:ui:component`, `test:ui:e2e`, `test:smoke`, `gen:mocks`...).
+More scripts are added per iteration (`test:smoke`...).
 
 ## Structure
 
@@ -69,9 +72,10 @@ playwright_base_project/
 │  ├─ config/               # env.ts (URLs, seed credentials), sessions.ts (saved session files)
 │  ├─ api/                  # API clients: Auth, Accounts, Operator, Transfers (+ ApiClient, jwt)
 │  ├─ pages/                # Locators + Actions per screen and shared components (dialog)
-│  ├─ mocks/                # page.route handlers and coherent payloads
+│  ├─ mocks/                # page.route handlers, payloads, generated/ examples and api-types.ts (from OpenAPI)
 │  ├─ fixtures/             # api, ui, mocks, session → base → actors (customer, operator)
-│  └─ data/                 # unique test data factories and fake sessions
+│  └─ data/                 # factories, fake sessions, shared domain types
+├─ scripts/gen-mocks.ts     # OpenAPI examples → src/mocks/generated
 ├─ tests/
 │  ├─ setup/                # API/web health checks and saved session per role
 │  ├─ ui/component/         # screen + mocked API
@@ -81,7 +85,7 @@ playwright_base_project/
 └─ docs/
 ```
 
-Layer rule: `tests → fixtures → pages (Actions → Locators) / api / mocks → config`. Tests describe the scenario and assert; fixtures build and inject everything else. See [docs/playwright-plan.md](docs/playwright-plan.md).
+Layer rule: `tests → fixtures → pages (Actions → Locators) / api / mocks → config / data`, enforced by `pnpm lint`. Tests describe the scenario and assert; fixtures build and inject everything else. See [docs/playwright-plan.md](docs/playwright-plan.md).
 
 ## Test users
 

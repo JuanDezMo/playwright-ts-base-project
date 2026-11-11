@@ -1,0 +1,10 @@
+{
+  "id": "a41e5c1d-0b2a-4f3e-9d8c-7b6a5f4e3d21",
+  "accountId": "6f1c4e2a-8b1d-4c3e-9f7a-2d5b8c1e0a34",
+  "movementType": "recharge",
+  "amount": 150000,
+  "details": {
+    "rechargeType": "salary"
+  },
+  "createdAt": "2026-11-09T14:30:00.000Z"
+}

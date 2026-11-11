@@ -1,5 +1,5 @@
 import type { Locator, Page } from '@playwright/test'
-import type { AccountType } from '@/api/AccountsApi'
+import type { AccountType } from '@/data/domain'
 
 // Diálogo "Open an account": lo usan el dashboard vacío, la acción "Add account" y la lista
 export class CreateAccountDialogLocators {

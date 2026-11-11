@@ -185,6 +185,14 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 
 ## Iteración 9 · Mocks desde OpenAPI (S)
 
+**Estado:** completada. Decisiones:
+
+- `scripts/gen-mocks.ts` se ejecuta directamente con Node 22 (sin dependencias extra) y escribe un JSON por ejemplo en `src/mocks/generated/<operationId>/<status>.<ejemplo>.json` y un `index.ts` tipado (`examples.transfer['422'].insufficientFunds`) para importarlos. Si una respuesta no trae ejemplo propio, usa el `example` de su schema (por ejemplo, el 201 de `recharge`).
+- Los 400 aparecen en todas las operaciones porque el contrato comparte la respuesta `BadRequest`.
+- Los handlers validan cada cuerpo con `satisfies` contra `api-types.ts`: al cambiar un `code` del ejemplo, `pnpm typecheck` falla.
+- `AccountType` y `RechargeType` pasaron a `src/data/domain.ts`: las páginas los importaban desde `api/`, lo que la regla de ESLint prohíbe.
+- ESLint (`pnpm lint`) con `no-restricted-imports` por carpeta: pages ↛ api/mocks/fixtures, api ↛ pages/mocks/fixtures, mocks ↛ api/pages/fixtures, `tests/ui/component` ↛ api/pages y `tests/api` ↛ pages/mocks.
+
 **Objetivo:** que los mocks escritos a mano no se desalineen del contrato.
 
 | #   | Tarea                                                                                           | Criterio de terminado                              |

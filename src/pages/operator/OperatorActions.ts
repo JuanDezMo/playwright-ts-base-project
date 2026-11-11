@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test'
-import type { RechargeType } from '@/api/OperatorApi'
+import type { RechargeType } from '@/data/domain'
 import type { OperatorLocators } from './OperatorLocators'
 
 // Cómo se opera la pantalla del operador

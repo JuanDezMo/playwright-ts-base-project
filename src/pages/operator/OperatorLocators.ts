@@ -1,5 +1,5 @@
 import type { Locator, Page } from '@playwright/test'
-import type { RechargeType } from '@/api/OperatorApi'
+import type { RechargeType } from '@/data/domain'
 
 const rechargeTypeNames: Record<RechargeType, RegExp> = {
   cash: /Cash/,

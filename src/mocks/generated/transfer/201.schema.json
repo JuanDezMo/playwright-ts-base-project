@@ -1,0 +1,22 @@
+{
+  "transferOut": {
+    "id": "c7a01b2c-3d4e-4f5a-8b6c-7d8e9f0a1b2c",
+    "accountId": "6f1c4e2a-8b1d-4c3e-9f7a-2d5b8c1e0a34",
+    "movementType": "transfer_out",
+    "amount": 40000,
+    "details": {
+      "relatedAccountId": "b92d7e6f-5a4b-4c3d-8e2f-1a0b9c8d7e6f"
+    },
+    "createdAt": "2026-11-09T14:35:00.000Z"
+  },
+  "transferIn": {
+    "id": "d8131a2b-3c4d-4e5f-9a6b-7c8d9e0f1a2b",
+    "accountId": "b92d7e6f-5a4b-4c3d-8e2f-1a0b9c8d7e6f",
+    "movementType": "transfer_in",
+    "amount": 40000,
+    "details": {
+      "relatedAccountId": "6f1c4e2a-8b1d-4c3e-9f7a-2d5b8c1e0a34"
+    },
+    "createdAt": "2026-11-09T14:35:00.000Z"
+  }
+}

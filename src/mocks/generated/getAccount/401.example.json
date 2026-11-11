@@ -1,0 +1,4 @@
+{
+  "code": "UNAUTHORIZED",
+  "message": "Missing or invalid token"
+}

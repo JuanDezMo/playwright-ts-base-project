@@ -1,0 +1,4 @@
+{
+  "code": "BAD_REQUEST",
+  "message": "Amount must be greater than zero"
+}

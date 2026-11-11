@@ -1,27 +1,30 @@
 import type { Page } from '@playwright/test'
+import type { components } from './api-types'
+import { examples } from './generated'
 import type { MockAccount } from './payloads'
 
 // Respuestas simuladas de la API con page.route (nativo de Playwright).
+// Los cuerpos salen de los ejemplos de openapi.yaml (pnpm gen:mocks) y se validan con
+// `satisfies` contra los tipos del contrato: si el contrato cambia, esto deja de compilar.
 // El frontend llama a /api/* (su proxy hacia la API Go), por eso el patrón empieza con **/api.
-// Iteración 9: estos cuerpos pasarán a generarse desde openapi.yaml.
+
+type ApiError = components['schemas']['Error']
+type RechargeMovement = components['schemas']['RechargeMovement']
 
 export const mockLogin = {
   invalidCredentials: async (page: Page): Promise<void> => {
     await page.route('**/api/auth/login', (route) =>
-      route.fulfill({
-        status: 401,
-        json: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' },
-      }),
+      route.fulfill({ status: 401, json: examples.login['401'].example satisfies ApiError }),
     )
   },
 
-  // 429 con Retry-After: el frontend lo usa para la cuenta regresiva
+  // 429 con Retry-After: el header no tiene valor de ejemplo en el contrato, se indica aquí
   tooManyRequests: async (page: Page, retryAfterSeconds: number): Promise<void> => {
     await page.route('**/api/auth/login', (route) =>
       route.fulfill({
         status: 429,
         headers: { 'Retry-After': String(retryAfterSeconds) },
-        json: { code: 'TOO_MANY_REQUESTS', message: 'Too many login attempts' },
+        json: examples.login['429'].example satisfies ApiError,
       }),
     )
   },
@@ -30,35 +33,22 @@ export const mockLogin = {
 export const mockRegister = {
   emailAlreadyRegistered: async (page: Page): Promise<void> => {
     await page.route('**/api/auth/register', (route) =>
-      route.fulfill({
-        status: 409,
-        json: { code: 'EMAIL_ALREADY_REGISTERED', message: 'Email already registered' },
-      }),
+      route.fulfill({ status: 409, json: examples.register['409'].example satisfies ApiError }),
     )
   },
 }
 
 export const mockRecharge = {
-  // 201 con el movimiento creado (mismo formato que F-08)
+  // 201 con el movimiento del ejemplo, cambiando el monto por el que pide la prueba
   success: async (page: Page, amountCents: number): Promise<void> => {
-    await page.route('**/api/recharge', (route) =>
-      route.fulfill({
-        status: 201,
-        json: {
-          id: 'a41e0000-0000-4000-8000-000000000001',
-          accountId: '6f1c0000-0000-4000-8000-000000000001',
-          movementType: 'recharge',
-          amount: amountCents,
-          details: { rechargeType: 'salary' },
-          createdAt: '2026-11-10T14:30:00.000Z',
-        },
-      }),
-    )
+    const movement = { ...examples.recharge['201'].schema, amount: amountCents } satisfies RechargeMovement
+    await page.route('**/api/recharge', (route) => route.fulfill({ status: 201, json: movement }))
   },
 }
 
 export const mockAccounts = {
-  // GET /accounts con la lista indicada (solo el listado; no intercepta /accounts/:id)
+  // GET /accounts con la lista indicada (solo el listado; no intercepta /accounts/:id).
+  // Datos escritos a mano en payloads.ts: deben ser coherentes entre llamadas.
   list: async (page: Page, items: readonly MockAccount[]): Promise<void> => {
     await page.route('**/api/accounts', (route) =>
       route.request().method() === 'GET' ? route.fulfill({ json: { items } }) : route.fallback(),
@@ -69,7 +59,7 @@ export const mockAccounts = {
 export const mockTransfer = {
   insufficientFunds: async (page: Page): Promise<void> => {
     await page.route('**/api/transfers', (route) =>
-      route.fulfill({ status: 422, json: { code: 'INSUFFICIENT_FUNDS', message: 'Insufficient funds' } }),
+      route.fulfill({ status: 422, json: examples.transfer['422'].insufficientFunds satisfies ApiError }),
     )
   },
 }

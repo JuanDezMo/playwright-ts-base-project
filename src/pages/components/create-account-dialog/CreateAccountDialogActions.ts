@@ -1,4 +1,4 @@
-import type { AccountType } from '@/api/AccountsApi'
+import type { AccountType } from '@/data/domain'
 import type { CreateAccountDialogLocators } from './CreateAccountDialogLocators'
 
 export class CreateAccountDialogActions {

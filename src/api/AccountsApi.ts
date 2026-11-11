@@ -1,7 +1,6 @@
 import type { APIResponse } from '@playwright/test'
+import type { AccountType } from '../data/domain'
 import type { ApiClient } from './ApiClient'
-
-export type AccountType = 'savings' | 'checking'
 
 // Endpoints de cuentas (F-05 a F-07). Requiere un cliente con token.
 export class AccountsApi {

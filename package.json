@@ -10,11 +10,19 @@
     "test:ui:component": "playwright test --project=ui-component",
     "test:ui:e2e": "playwright test --project=ui-e2e",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "gen:mocks": "node scripts/gen-mocks.ts && pnpm gen:types",
+    "gen:types": "openapi-typescript ${OPENAPI_PATH:-../accounts_api/openapi.yaml} -o src/mocks/api-types.ts",
     "report": "playwright show-report"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "1.65.0",
     "@types/node": "^26.6.6",
-    "typescript": "~5.9.3"
+    "eslint": "^10.14.0",
+    "openapi-typescript": "^7.13.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.72.2",
+    "yaml": "^2.9.1"
   }
 }
