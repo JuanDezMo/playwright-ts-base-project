@@ -64,6 +64,8 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 
 ## Iteración 2 · Primera prueba de UI · componente: C-03 (S)
 
+**Estado:** completada. Prueba en `tests/ui/component/login/login.spec.ts`; comparativa 1 en `comparisons.md`. Aprendizaje: los localizadores se crean **en el constructor** (como campos con inicializador fallan porque `page` aún no existe).
+
 **Objetivo:** el mismo escenario en la UI con la API simulada, y la primera comparación.
 
 | #   | Tarea                                                                                                 | Criterio de terminado                                                 |

@@ -17,7 +17,8 @@ Automated tests with [Playwright](https://playwright.dev) for **Banking Test Lab
 | --- | --- |
 | 0 · Base project | ✅ Done: structure, config, smoke test `SMOKE-01` |
 | 1 · First API component test (API-AUTH-01) | ✅ Done: `ApiClient`, `AuthApi`, `authApi` fixture, `uniqueEmail()` |
-| 2 · First UI component test (C-03) | Next |
+| 2 · First UI component test (C-03) | ✅ Done: login Locators/Actions, `page.route` mock, comparison 1 |
+| 3 · Successful login: API and e2e | Next |
 
 ## Requirements
 
@@ -30,7 +31,7 @@ Automated tests with [Playwright](https://playwright.dev) for **Banking Test Lab
 
 ```bash
 pnpm install
-pnpm exec playwright install chromium   # browsers, needed from iteration 2
+pnpm exec playwright install chromium   # browser for UI tests
 
 # Start the API (../accounts_api/go_accounts_api) and, for UI tests, the web app:
 #   cd ../banking_frontend_lab && pnpm dev
@@ -46,6 +47,7 @@ Default URLs and the operator credentials live in `src/config/env.ts`. To overri
 | --- | --- |
 | `pnpm test` | Run every project |
 | `pnpm test:api` | API component tests (no browser) |
+| `pnpm test:ui:component` | UI component tests (needs the web app, not the API) |
 | `pnpm typecheck` | TypeScript check |
 | `pnpm report` | Open the last HTML report |
 
@@ -55,12 +57,12 @@ More scripts are added per iteration (`test:ui:component`, `test:ui:e2e`, `test:
 
 ```
 playwright_base_project/
-├─ playwright.config.ts     # one project per test type (only api-component so far)
+├─ playwright.config.ts     # one project per test type (api-component, ui-component)
 ├─ src/
 │  ├─ config/env.ts         # URLs and seed credentials
 │  ├─ api/                  # API clients: ApiClient, AuthApi
-│  ├─ pages/                # Locators + Actions per screen (iteration 2)
-│  ├─ mocks/                # page.route handlers (iteration 2)
+│  ├─ pages/                # Locators + Actions per screen (login)
+│  ├─ mocks/                # page.route handlers
 │  ├─ fixtures/             # dependency injection: import { test, expect } from '@/fixtures'
 │  └─ data/                 # unique test data factories
 ├─ tests/

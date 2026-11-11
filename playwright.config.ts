@@ -1,8 +1,8 @@
-import { defineConfig } from '@playwright/test'
+import { defineConfig, devices } from '@playwright/test'
 import { env } from './src/config/env'
 
 // Un proyecto por tipo de prueba (ver docs/playwright-plan.md, sección 6).
-// Iteración 0: solo api-component. Los demás proyectos se agregan en sus iteraciones.
+// Los demás proyectos (ui-e2e, api-e2e, móvil) se agregan en sus iteraciones.
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -18,6 +18,12 @@ export default defineConfig({
       name: 'api-component',
       testDir: './tests/api/component',
       use: { baseURL: env.apiUrl },
+    },
+    {
+      // Pantalla + API simulada: necesita el frontend, no la API
+      name: 'ui-component',
+      testDir: './tests/ui/component',
+      use: { ...devices['Desktop Chrome'], baseURL: env.baseUrl },
     },
   ],
 })

@@ -7,6 +7,7 @@
   "scripts": {
     "test": "playwright test",
     "test:api": "playwright test --project=api-component",
+    "test:ui:component": "playwright test --project=ui-component",
     "typecheck": "tsc --noEmit",
     "report": "playwright show-report"
   },

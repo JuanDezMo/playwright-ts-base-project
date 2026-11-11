@@ -141,12 +141,24 @@ La regla de dependencia se verifica con ESLint (`no-restricted-imports` por carp
 ```ts
 // src/pages/transfer/TransferLocators.ts: si cambia el HTML, solo cambia este archivo
 export class TransferLocators {
-  constructor(private readonly page: Page) {}
-  readonly destination = this.page.getByLabel('To account number')
-  readonly amount = this.page.getByLabel('Amount')
-  readonly reviewButton = this.page.getByRole('button', { name: 'Review transfer' })
-  readonly destinationChip = (number: string) => this.page.getByTestId(`destination-chip-${number}`)
-  readonly successToast = this.page.getByText(/Transfer of .* completed/)
+  readonly destination: Locator
+  readonly amount: Locator
+  readonly reviewButton: Locator
+  readonly successToast: Locator
+
+  // Se asignan en el constructor: como campos con inicializador (`= this.page.getBy…`)
+  // se evaluarían antes de que exista `page` y fallarían en tiempo de ejecución
+  constructor(private readonly page: Page) {
+    this.destination = page.getByLabel('To account number')
+    this.amount = page.getByLabel('Amount')
+    this.reviewButton = page.getByRole('button', { name: 'Review transfer' })
+    this.successToast = page.getByText(/Transfer of .* completed/)
+  }
+
+  // Localizador con parámetro: un método, no un campo
+  destinationChip(number: string): Locator {
+    return this.page.getByTestId(`destination-chip-${number}`)
+  }
 }
 
 // src/pages/transfer/TransferActions.ts: si cambia el flujo, solo cambia este archivo
