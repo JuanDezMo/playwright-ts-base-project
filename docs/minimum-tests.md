@@ -7,6 +7,8 @@ Conjunto inicial y sencillo para el futuro proyecto de Playwright (repositorio a
 
 ## Datos y utilidades comunes
 
+Nombres propuestos originalmente; en el proyecto quedaron como fixtures: `createCustomer` → `customer`, `loginAs` → `LoginActions.loginAs` y `customerSession`, `rechargeByApi` → `operatorApi.recharge`.
+
 | Recurso                                         | Uso                                                                                                                                                   |
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Operador                                        | `operator@bank.local` / `Operator2026!` (seed de la API)                                                                                              |

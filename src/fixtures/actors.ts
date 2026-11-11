@@ -1,7 +1,11 @@
+import type { Page } from '@playwright/test'
 import { AccountsApi } from '../api/AccountsApi'
 import type { ApiClient } from '../api/ApiClient'
+import { OperatorApi } from '../api/OperatorApi'
 import { env } from '../config/env'
 import { newCustomer } from '../data/factories'
+import { DashboardActions, DashboardLocators } from '../pages/dashboard'
+import { LoginActions, LoginLocators } from '../pages/login'
 import { test as base } from './base'
 
 // Un cliente creado para la prueba, con su token de API
@@ -10,6 +14,14 @@ export type Customer = {
   email: string
   password: string
   client: ApiClient
+}
+
+// Navegador aparte (otro contexto) con el cliente logueado: permite que dos
+// usuarios usen la app a la vez en la misma prueba (operador y cliente)
+export type CustomerBrowser = {
+  page: Page
+  dashboard: DashboardActions
+  dashboardUi: DashboardLocators
 }
 
 export type ActorFixtures = {
@@ -21,6 +33,8 @@ export type ActorFixtures = {
   // Operador del seed con su token de API
   operatorClient: ApiClient
   operatorAccountsApi: AccountsApi
+  operatorApi: OperatorApi
+  customerBrowser: CustomerBrowser
 }
 
 // Lee el access token de una respuesta de login; falla con un mensaje claro si no hay
@@ -51,5 +65,17 @@ export const test = base.extend<ActorFixtures>({
   },
   operatorAccountsApi: async ({ operatorClient }, use) => {
     await use(new AccountsApi(operatorClient))
+  },
+  operatorApi: async ({ operatorClient }, use) => {
+    await use(new OperatorApi(operatorClient))
+  },
+  customerBrowser: async ({ browser, customer }, use) => {
+    // Un contexto nuevo no hereda el baseURL del proyecto: se indica explícitamente
+    const context = await browser.newContext({ baseURL: env.baseUrl })
+    const page = await context.newPage()
+    await new LoginActions(page, new LoginLocators(page)).loginAs(customer, '/accounts')
+    const dashboardUi = new DashboardLocators(page)
+    await use({ page, dashboardUi, dashboard: new DashboardActions(page, dashboardUi) })
+    await context.close()
   },
 })

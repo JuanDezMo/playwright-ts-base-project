@@ -1,5 +1,5 @@
 import { test as base } from '@playwright/test'
-import { mockLogin, mockRegister } from '../mocks/handlers'
+import { mockLogin, mockRecharge, mockRegister } from '../mocks/handlers'
 
 // Handlers de mocks ya ligados a la página de la prueba: mockApi.login.tooManyRequests(75)
 type MockApi = {
@@ -9,6 +9,9 @@ type MockApi = {
   }
   register: {
     emailAlreadyRegistered: () => Promise<void>
+  }
+  recharge: {
+    success: (amountCents: number) => Promise<void>
   }
 }
 
@@ -23,6 +26,9 @@ export const test = base.extend<MockFixtures>({
       },
       register: {
         emailAlreadyRegistered: () => mockRegister.emailAlreadyRegistered(page),
+      },
+      recharge: {
+        success: (amountCents) => mockRecharge.success(page, amountCents),
       },
     })
   },

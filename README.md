@@ -22,7 +22,8 @@ Automated tests with [Playwright](https://playwright.dev) for **Banking Test Lab
 | 4 · Login lockout: when to mock | ✅ Done: API-AUTH-03, C-04 with `page.clock`, comparison 3 |
 | 5 · Register | ✅ Done: register Locators/Actions, C-01, C-02, API-REG-01, API-REG-02 |
 | 6 · Accounts | ✅ Done: AccountsApi, dashboard and dialog page objects, actor fixtures, E2E-01, API-ACC-01 |
-| 7 · Recharge | Next |
+| 7 · Recharge | ✅ Done: OperatorApi, operator page objects, fake session, C-07, C-08, E2E-02 (two browser contexts), API-RCH-01 |
+| 8 · Transfer | Next |
 
 ## Requirements
 
@@ -65,11 +66,11 @@ playwright_base_project/
 ├─ playwright.config.ts     # health checks + auth setup, then api-component, ui-component, ui-e2e
 ├─ src/
 │  ├─ config/               # env.ts (URLs, seed credentials), sessions.ts (saved session files)
-│  ├─ api/                  # API clients: ApiClient, AuthApi, AccountsApi, jwt
+│  ├─ api/                  # API clients: ApiClient, AuthApi, AccountsApi, OperatorApi, jwt
 │  ├─ pages/                # Locators + Actions per screen and shared components (dialog)
 │  ├─ mocks/                # page.route handlers
 │  ├─ fixtures/             # api, ui, mocks, session → base → actors (customer, operator)
-│  └─ data/                 # unique test data factories
+│  └─ data/                 # unique test data factories and fake sessions
 ├─ tests/
 │  ├─ setup/                # API/web health checks and saved session per role
 │  ├─ ui/component/         # screen + mocked API

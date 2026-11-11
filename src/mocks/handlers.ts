@@ -36,3 +36,22 @@ export const mockRegister = {
     )
   },
 }
+
+export const mockRecharge = {
+  // 201 con el movimiento creado (mismo formato que F-08)
+  success: async (page: Page, amountCents: number): Promise<void> => {
+    await page.route('**/api/recharge', (route) =>
+      route.fulfill({
+        status: 201,
+        json: {
+          id: 'a41e0000-0000-4000-8000-000000000001',
+          accountId: '6f1c0000-0000-4000-8000-000000000001',
+          movementType: 'recharge',
+          amount: amountCents,
+          details: { rechargeType: 'salary' },
+          createdAt: '2026-11-10T14:30:00.000Z',
+        },
+      }),
+    )
+  },
+}

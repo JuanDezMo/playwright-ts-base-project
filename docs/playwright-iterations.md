@@ -146,6 +146,12 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 
 ## Iteración 7 · Recarga (M)
 
+**Estado:** completada. C-07 y C-08 en `tests/ui/component/recharge/recharge.spec.ts`, E2E-02 en `tests/ui/e2e/recharge/recharge-flow.spec.ts` y API-RCH-01 en `tests/api/component/recharge/recharge.spec.ts`. Decisiones:
+
+- `/operator` es una ruta protegida. Para que las pruebas de UI · componente sigan sin necesitar la API, la fixture `asFakeOperator` inyecta una **sesión simulada** (JWT falso con `role: operator`): el frontend solo lee el rol, la firma la valida el backend.
+- E2E-02 usa **dos contextos de navegador**: la página principal es del operador (sesión guardada) y la fixture `customerBrowser` abre otro contexto con el cliente logueado. Un contexto nuevo no hereda el `baseURL` del proyecto: hay que pasarlo.
+- El helper `rechargeByApi` quedó como la fixture `operatorApi` (`OperatorApi.recharge`, con `Idempotency-Key` nueva en cada llamada).
+
 **Objetivo:** el flujo del operador completo.
 
 | #   | Tarea                                                                                                  | Criterio de terminado                           |
@@ -153,7 +159,7 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 | 7.1 | `OperatorLocators.ts` (completo) y `OperatorActions.ts` (`recharge(number, type, amount)`)             | Usa las opciones por rol y la etiqueta "Amount" |
 | 7.2 | C-07: formulario vacío → tres mensajes de validación                                                   | Pasa sin mocks                                  |
 | 7.3 | `mockRecharge.success(page)` y C-08: comprobante con `$1,500.00` y "View account"                      | Pasa en `ui-component`                          |
-| 7.4 | `OperatorApi.ts` (`recharge`, con `Idempotency-Key` nueva en cada llamada) y helper `rechargeByApi`    | Lo usarán las iteraciones 8 y 10                |
+| 7.4 | `OperatorApi.ts` (`recharge`, con `Idempotency-Key` nueva en cada llamada) y fixture `operatorApi`    | Lo usarán las iteraciones 8 y 10                |
 | 7.5 | E2E-02: el operador recarga por la UI y el cliente ve el saldo y "Salary" (dos contextos de navegador) | Pasa en `ui-e2e`                                |
 | 7.6 | API-RCH-01: efectivo por encima de $3,000.00 → 422 `CASH_LIMIT_EXCEEDED`                               | Pasa en `api-component`                         |
 
@@ -166,7 +172,7 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 | 8.1 | `TransferLocators.ts`, `TransferActions.ts` y `ConfirmTransferDialog` (Locators y Actions)                                 | `review()` y `confirm()` separados |
 | 8.2 | C-05: misma cuenta y monto vacío → mensajes y sin diálogo                                                                  | Pasa en `ui-component`             |
 | 8.3 | `mockTransfer.insufficientFunds(page)` y C-06                                                                              | Pasa en `ui-component`             |
-| 8.4 | Fixture `customerWithFunds` (cliente + dos cuentas + `rechargeByApi`)                                                      | Prepara datos sin pasar por la UI  |
+| 8.4 | Fixture `customerWithFunds` (cliente + dos cuentas + recarga con `operatorApi`)                                                      | Prepara datos sin pasar por la UI  |
 | 8.5 | E2E-03: transferir $250.00 entre cuentas propias → toast, `$750.00` y "Transfer out"                                       | Pasa en `ui-e2e`                   |
 | 8.6 | `TransfersApi.ts` y API-TRF-01: repetir con la misma `Idempotency-Key` → mismo cuerpo y header `Idempotent-Replayed: true` | Pasa en `api-component`            |
 

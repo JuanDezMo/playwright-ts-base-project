@@ -1,13 +1,14 @@
 import { test as base } from '@playwright/test'
 import { DashboardActions, DashboardLocators } from '../pages/dashboard'
 import { LoginActions, LoginLocators } from '../pages/login'
-import { OperatorLocators } from '../pages/operator'
+import { OperatorActions, OperatorLocators } from '../pages/operator'
 import { RegisterActions, RegisterLocators } from '../pages/register'
 
 export type UiFixtures = {
   loginUi: LoginLocators
   login: LoginActions
   operatorUi: OperatorLocators
+  operator: OperatorActions
   registerUi: RegisterLocators
   register: RegisterActions
   dashboardUi: DashboardLocators
@@ -24,6 +25,9 @@ export const test = base.extend<UiFixtures>({
   },
   operatorUi: async ({ page }, use) => {
     await use(new OperatorLocators(page))
+  },
+  operator: async ({ page, operatorUi }, use) => {
+    await use(new OperatorActions(page, operatorUi))
   },
   registerUi: async ({ page }, use) => {
     await use(new RegisterLocators(page))
