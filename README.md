@@ -20,7 +20,8 @@ Automated tests with [Playwright](https://playwright.dev) for **Banking Test Lab
 | 2 · First UI component test (C-03) | ✅ Done: login Locators/Actions, `page.route` mock, comparison 1 |
 | 3 · Successful login: API and e2e | ✅ Done: API-AUTH-02, E2E-00, health checks, saved operator session, comparison 2 |
 | 4 · Login lockout: when to mock | ✅ Done: API-AUTH-03, C-04 with `page.clock`, comparison 3 |
-| 5 · Register | Next |
+| 5 · Register | ✅ Done: register Locators/Actions, C-01, C-02, API-REG-01, API-REG-02 |
+| 6 · Accounts | Next |
 
 ## Requirements
 
@@ -64,7 +65,7 @@ playwright_base_project/
 ├─ src/
 │  ├─ config/               # env.ts (URLs, seed credentials), sessions.ts (saved session files)
 │  ├─ api/                  # API clients: ApiClient, AuthApi
-│  ├─ pages/                # Locators + Actions per screen (login)
+│  ├─ pages/                # Locators + Actions per screen (login, register, operator)
 │  ├─ mocks/                # page.route handlers
 │  ├─ fixtures/             # dependency injection: import { test, expect } from '@/fixtures'
 │  └─ data/                 # unique test data factories

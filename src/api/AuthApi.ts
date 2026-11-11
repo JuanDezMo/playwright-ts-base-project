@@ -5,6 +5,10 @@ import type { ApiClient } from './ApiClient'
 export class AuthApi {
   constructor(private readonly client: ApiClient) {}
 
+  register(name: string, email: string, password: string): Promise<APIResponse> {
+    return this.client.post('/auth/register', { name, email, password })
+  }
+
   login(email: string, password: string): Promise<APIResponse> {
     return this.client.post('/auth/login', { email, password })
   }

@@ -113,6 +113,8 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 
 ## Iteración 5 · Registro (M)
 
+**Estado:** completada. C-01 y C-02 en `tests/ui/component/register/register.spec.ts`; API-REG-01 y API-REG-02 en `tests/api/component/auth/register.spec.ts`. Los mensajes bajo cada campo se localizan con CSS por id (`#register-email-error`), el mismo id que el input referencia con `aria-describedby`. API-REG-02 también verifica que el email se compara sin distinguir mayúsculas (RN-25).
+
 **Objetivo:** la primera funcionalidad completa en los tres niveles.
 
 | #   | Tarea                                                                                                           | Criterio de terminado              |

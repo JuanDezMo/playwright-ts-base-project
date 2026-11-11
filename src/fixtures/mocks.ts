@@ -1,11 +1,14 @@
 import { test as base } from '@playwright/test'
-import { mockLogin } from '../mocks/handlers'
+import { mockLogin, mockRegister } from '../mocks/handlers'
 
 // Handlers de mocks ya ligados a la página de la prueba: mockApi.login.tooManyRequests(75)
 type MockApi = {
   login: {
     invalidCredentials: () => Promise<void>
     tooManyRequests: (retryAfterSeconds: number) => Promise<void>
+  }
+  register: {
+    emailAlreadyRegistered: () => Promise<void>
   }
 }
 
@@ -17,6 +20,9 @@ export const test = base.extend<MockFixtures>({
       login: {
         invalidCredentials: () => mockLogin.invalidCredentials(page),
         tooManyRequests: (seconds) => mockLogin.tooManyRequests(page, seconds),
+      },
+      register: {
+        emailAlreadyRegistered: () => mockRegister.emailAlreadyRegistered(page),
       },
     })
   },

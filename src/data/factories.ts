@@ -8,3 +8,8 @@ export function uniqueEmail(prefix = 'user'): string {
 
 // Contraseña válida para la API (8 a 128 caracteres)
 export const validPassword = 'Lab2026pass'
+
+// Datos válidos de un cliente nuevo (registro)
+export function newCustomer(prefix = 'customer') {
+  return { name: 'Ana Pérez', email: uniqueEmail(prefix), password: validPassword }
+}

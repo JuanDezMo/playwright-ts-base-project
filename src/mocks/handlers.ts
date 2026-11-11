@@ -25,3 +25,14 @@ export const mockLogin = {
     )
   },
 }
+
+export const mockRegister = {
+  emailAlreadyRegistered: async (page: Page): Promise<void> => {
+    await page.route('**/api/auth/register', (route) =>
+      route.fulfill({
+        status: 409,
+        json: { code: 'EMAIL_ALREADY_REGISTERED', message: 'Email already registered' },
+      }),
+    )
+  },
+}
