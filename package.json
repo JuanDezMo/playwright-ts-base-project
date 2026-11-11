@@ -1,0 +1,18 @@
+{
+  "name": "playwright-banking-lab",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Automated tests (Playwright) for the Banking Test Lab web app and Go API",
+  "scripts": {
+    "test": "playwright test",
+    "test:api": "playwright test --project=api-component",
+    "typecheck": "tsc --noEmit",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "@types/node": "^26.6.6",
+    "typescript": "~5.9.3"
+  }
+}

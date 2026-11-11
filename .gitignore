@@ -1,0 +1,13 @@
+node_modules/
+
+# Resultados de Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Sesiones guardadas por rol (contienen tokens)
+.auth/
+
+# Variables locales
+.env
