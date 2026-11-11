@@ -1,3 +1,4 @@
+import type { Account } from '@/data/domain'
 import { expect, test } from '@/fixtures'
 
 test.describe('Transfer flow (real API)', () => {
@@ -25,6 +26,6 @@ test.describe('Transfer flow (real API)', () => {
 
     // Confirmar con la API el destino
     const response = await customerAccountsApi.getById(customerWithFunds.checking.id)
-    expect(((await response.json()) as { balance: number }).balance).toBe(25000)
+    expect(((await response.json()) as Account).balance).toBe(25000)
   })
 })

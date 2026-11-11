@@ -1,7 +1,5 @@
+import type { Account, Movement, MovementPage } from '@/data/domain'
 import { expect, test } from '@/fixtures'
-
-type Account = { id: string; accountNumber: string; balance: number }
-type Movement = { movementType: 'recharge' | 'withdrawal' | 'transfer_in' | 'transfer_out'; amount: number }
 
 // Signo de un movimiento: recargas y entradas suman; salidas y retiros restan (RN-17)
 const signed = (m: Movement) =>
@@ -30,7 +28,7 @@ test.describe('Money flow (API only)', () => {
         [checking, 25000, 1],
       ] as const) {
         const current = (await (await customerAccountsApi.getById(account.id)).json()) as Account
-        const { items } = (await (await customerAccountsApi.movements(account.id)).json()) as { items: Movement[] }
+        const { items } = (await (await customerAccountsApi.movements(account.id)).json()) as MovementPage
 
         expect(current.balance).toBe(expectedBalance)
         expect(items).toHaveLength(expectedMovements)

@@ -1,10 +1,14 @@
+import { jsonOf } from '@/api/json'
+import type { Account } from '@/data/domain'
 import { expect, test } from '@/fixtures'
 
 test.describe('POST /recharge', () => {
   test('API-RCH-01 rejects a cash recharge above $3,000.00 with 422', async ({ customerAccountsApi, operatorApi }) => {
-    const created = await customerAccountsApi.create('savings')
-    expect(created.status(), 'setup: create savings account').toBe(201)
-    const { accountNumber } = (await created.json()) as { accountNumber: string }
+    const { accountNumber } = await jsonOf<Account>(
+      await customerAccountsApi.create('savings'),
+      201,
+      'setup: create savings account',
+    )
 
     // 300001 centavos = $3,000.01: un centavo sobre el tope de efectivo (RN-08)
     const response = await operatorApi.recharge(accountNumber, 300001, 'cash')

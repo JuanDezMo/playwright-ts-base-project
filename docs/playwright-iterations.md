@@ -232,6 +232,14 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 | 11.3 | Publicar el reporte HTML y las trazas como artefactos                                  | Se descargan desde la ejecución fallida           |
 | 11.4 | `retries: 2` en CI y sharding de las e2e                                               | Las e2e corren en 2 shards                        |
 
+### Mejoras posteriores a la revisión
+
+- **UI · componente del detalle de cuenta:** C-09 a C-13 (`tests/ui/component/account-detail`): saldo y movimientos con signo, estado vacío, paginación de 20 en 20, página inválida y cuenta inexistente. Usan `mockApi.accountDetail`.
+- **Casos negativos de API:** API-TRF-02 a 05 (misma cuenta, saldo insuficiente, origen ajeno, sin token) y API-ACC-02 a 05 (sin token, cuenta ajena, id inválido, página 0). Nueva fixture `otherCustomer`.
+- **Respuestas tipadas:** `src/data/domain.ts` reexporta `Account`, `Movement`, `TransferResult`… desde `api-types.ts`; se eliminaron los tipos y `as {…}` escritos a mano.
+- **`jsonOf(response, status, paso)`** (`src/api/json.ts`): preparación de datos con error que nombra el paso; reemplaza las comprobaciones repetidas en fixtures y pruebas.
+- **Mocks generados:** las respuestas compartidas por `$ref` (BadRequest, Unauthorized…) se generan una vez en `generated/shared/` y se exportan como `sharedExamples`. De ~80 archivos a 35.
+
 ---
 
 ## Pruebas nuevas que introduce este plan

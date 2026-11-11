@@ -4,7 +4,10 @@ import type { ApiClient } from '../api/ApiClient'
 import { OperatorApi } from '../api/OperatorApi'
 import { TransfersApi } from '../api/TransfersApi'
 import { env } from '../config/env'
+import { jsonOf } from '../api/json'
+import type { AuthApi } from '../api/AuthApi'
 import { newCustomer } from '../data/factories'
+import type { Account, TokenPair } from '../data/domain'
 import { DashboardActions, DashboardLocators } from '../pages/dashboard'
 import { LoginActions, LoginLocators } from '../pages/login'
 import { test as base } from './base'
@@ -25,7 +28,7 @@ export type CustomerBrowser = {
   dashboardUi: DashboardLocators
 }
 
-type AccountRef = { id: string; accountNumber: string }
+type AccountRef = Pick<Account, 'id' | 'accountNumber'>
 
 // Cliente con dos cuentas y saldo: ahorros con $1,000.00 y corriente con $0.00
 export type CustomerWithFunds = Customer & {
@@ -39,6 +42,9 @@ export type ActorFixtures = {
   // El mismo cliente con la sesión iniciada en el navegador (por la UI)
   customerSession: Customer
   customerAccountsApi: AccountsApi
+  // Un segundo cliente, ajeno al primero: sirve para probar que no ve ni usa cuentas ajenas
+  otherCustomer: Customer
+  otherCustomerAccountsApi: AccountsApi
   // Operador del seed con su token de API
   operatorClient: ApiClient
   operatorAccountsApi: AccountsApi
@@ -48,20 +54,28 @@ export type ActorFixtures = {
   customerWithFunds: CustomerWithFunds
 }
 
-// Lee el access token de una respuesta de login; falla con un mensaje claro si no hay
+// Registra un cliente nuevo por API y devuelve su cliente HTTP con token
+async function registerCustomer(apiClient: ApiClient, authApi: AuthApi): Promise<Customer> {
+  const data = newCustomer()
+  await jsonOf(await authApi.register(data.name, data.email, data.password), 201, 'setup: register customer')
+  const token = await accessTokenFrom(await authApi.login(data.email, data.password))
+  return { ...data, client: apiClient.withToken(token) }
+}
+
 async function accessTokenFrom(response: Awaited<ReturnType<ApiClient['post']>>): Promise<string> {
-  if (!response.ok()) throw new Error(`Login failed during setup: ${response.status()} ${await response.text()}`)
-  return ((await response.json()) as { accessToken: string }).accessToken
+  return (await jsonOf<TokenPair>(response, 200, 'setup: login')).accessToken
 }
 
 // Actores: preparan datos por API (rápido) y, si hace falta, la sesión por la UI
 export const test = base.extend<ActorFixtures>({
   customer: async ({ apiClient, authApi }, use) => {
-    const data = newCustomer()
-    const created = await authApi.register(data.name, data.email, data.password)
-    if (created.status() !== 201) throw new Error(`Register failed during setup: ${created.status()}`)
-    const token = await accessTokenFrom(await authApi.login(data.email, data.password))
-    await use({ ...data, client: apiClient.withToken(token) })
+    await use(await registerCustomer(apiClient, authApi))
+  },
+  otherCustomer: async ({ apiClient, authApi }, use) => {
+    await use(await registerCustomer(apiClient, authApi))
+  },
+  otherCustomerAccountsApi: async ({ otherCustomer }, use) => {
+    await use(new AccountsApi(otherCustomer.client))
   },
   customerSession: async ({ customer, login }, use) => {
     await login.loginAs(customer, '/accounts')
@@ -85,15 +99,11 @@ export const test = base.extend<ActorFixtures>({
   },
   customerWithFunds: async ({ customer, customerAccountsApi, operatorApi }, use) => {
     // Todo por API: rápido y sin depender de la UI
-    const open = async (type: 'savings' | 'checking'): Promise<AccountRef> => {
-      const response = await customerAccountsApi.create(type)
-      if (response.status() !== 201) throw new Error(`Create ${type} failed during setup: ${response.status()}`)
-      return (await response.json()) as AccountRef
-    }
+    const open = async (type: 'savings' | 'checking'): Promise<AccountRef> =>
+      jsonOf<Account>(await customerAccountsApi.create(type), 201, `setup: create ${type} account`)
     const savings = await open('savings')
     const checking = await open('checking')
-    const recharged = await operatorApi.recharge(savings.accountNumber, 100000, 'salary')
-    if (recharged.status() !== 201) throw new Error(`Recharge failed during setup: ${recharged.status()}`)
+    await jsonOf(await operatorApi.recharge(savings.accountNumber, 100000, 'salary'), 201, 'setup: recharge savings')
     await use({ ...customer, savings, checking })
   },
   customerBrowser: async ({ browser, customer }, use) => {

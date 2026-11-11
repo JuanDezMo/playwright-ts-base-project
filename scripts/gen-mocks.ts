@@ -3,6 +3,7 @@
 //
 // Salida (no se edita a mano):
 //   src/mocks/generated/<operationId>/<status>.<ejemplo>.json  un archivo por ejemplo (legible)
+//   src/mocks/generated/shared/<Respuesta>.<ejemplo>.json      respuestas compartidas ($ref a components/responses), una sola vez
 //   src/mocks/generated/index.ts                               los mismos datos, tipados para importar
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
@@ -40,6 +41,8 @@ function examplesOf(response: Json): Record<string, unknown> {
 }
 
 const index: Record<string, Record<string, Record<string, unknown>>> = {}
+// Respuestas compartidas (BadRequest, Unauthorized…): se generan una vez y no por operación
+const shared: Record<string, Record<string, unknown>> = {}
 let files = 0
 
 rmSync(outDir, { recursive: true, force: true })
@@ -50,6 +53,21 @@ for (const operations of Object.values(spec.paths as Json)) {
     const { operationId, responses } = operation as Json
     if (typeof operationId !== 'string' || !responses) continue
     for (const [status, rawResponse] of Object.entries(responses as Json)) {
+      const ref = (rawResponse as Json).$ref
+      if (typeof ref === 'string') {
+        const name = ref.split('/').at(-1) as string
+        if (shared[name]) continue
+        shared[name] = {}
+        for (const [example, value] of Object.entries(examplesOf(resolve(rawResponse)))) {
+          if (value === undefined) continue
+          const file = path.join(outDir, 'shared', `${name}.${example}.json`)
+          mkdirSync(path.dirname(file), { recursive: true })
+          writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`)
+          shared[name][example] = value
+          files++
+        }
+        continue
+      }
       for (const [name, value] of Object.entries(examplesOf(resolve(rawResponse)))) {
         if (value === undefined) continue
         const file = path.join(outDir, operationId, `${status}.${name}.json`)
@@ -65,6 +83,8 @@ for (const operations of Object.values(spec.paths as Json)) {
 writeFileSync(
   path.join(outDir, 'index.ts'),
   `// GENERADO por scripts/gen-mocks.ts desde ${path.relative(process.cwd(), specPath)}. No editar a mano.\n` +
-    `export const examples = ${JSON.stringify(index, null, 2)} as const\n`,
+    `export const examples = ${JSON.stringify(index, null, 2)} as const\n\n` +
+    `// Respuestas compartidas por varias operaciones: examples de BadRequest, Unauthorized, etc.\n` +
+    `export const sharedExamples = ${JSON.stringify(shared, null, 2)} as const\n`,
 )
 console.log(`gen:mocks → ${files} examples from ${Object.keys(index).length} operations into ${path.relative(process.cwd(), outDir)}`)

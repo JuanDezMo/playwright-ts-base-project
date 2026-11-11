@@ -1,136 +1,14 @@
 // GENERADO por scripts/gen-mocks.ts desde ../accounts_api/openapi.yaml. No editar a mano.
 export const examples = {
   "register": {
-    "400": {
-      "invalidRequestBody": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid request body"
-      },
-      "invalidName": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid name"
-      },
-      "invalidEmail": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid email"
-      },
-      "passwordTooShort": {
-        "code": "BAD_REQUEST",
-        "message": "Password too short"
-      },
-      "passwordTooLong": {
-        "code": "BAD_REQUEST",
-        "message": "Password too long"
-      },
-      "invalidAccountType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account type"
-      },
-      "invalidAccountId": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account id"
-      },
-      "invalidAccountNumber": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account number"
-      },
-      "invalidRechargeType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid recharge type"
-      },
-      "invalidAmount": {
-        "code": "BAD_REQUEST",
-        "message": "Amount must be greater than zero"
-      },
-      "amountTooLarge": {
-        "code": "BAD_REQUEST",
-        "message": "Amount exceeds maximum"
-      },
-      "sameAccount": {
-        "code": "BAD_REQUEST",
-        "message": "Cannot transfer to the same account"
-      },
-      "invalidPagination": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid pagination"
-      },
-      "invalidIdempotencyKey": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid idempotency key"
-      }
-    },
     "409": {
       "example": {
         "code": "EMAIL_ALREADY_REGISTERED",
         "message": "Email already registered"
       }
-    },
-    "500": {
-      "example": {
-        "code": "INTERNAL_ERROR",
-        "message": "Internal error"
-      }
     }
   },
   "login": {
-    "400": {
-      "invalidRequestBody": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid request body"
-      },
-      "invalidName": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid name"
-      },
-      "invalidEmail": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid email"
-      },
-      "passwordTooShort": {
-        "code": "BAD_REQUEST",
-        "message": "Password too short"
-      },
-      "passwordTooLong": {
-        "code": "BAD_REQUEST",
-        "message": "Password too long"
-      },
-      "invalidAccountType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account type"
-      },
-      "invalidAccountId": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account id"
-      },
-      "invalidAccountNumber": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account number"
-      },
-      "invalidRechargeType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid recharge type"
-      },
-      "invalidAmount": {
-        "code": "BAD_REQUEST",
-        "message": "Amount must be greater than zero"
-      },
-      "amountTooLarge": {
-        "code": "BAD_REQUEST",
-        "message": "Amount exceeds maximum"
-      },
-      "sameAccount": {
-        "code": "BAD_REQUEST",
-        "message": "Cannot transfer to the same account"
-      },
-      "invalidPagination": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid pagination"
-      },
-      "invalidIdempotencyKey": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid idempotency key"
-      }
-    },
     "401": {
       "example": {
         "code": "INVALID_CREDENTIALS",
@@ -142,145 +20,9 @@ export const examples = {
         "code": "TOO_MANY_REQUESTS",
         "message": "Too many login attempts"
       }
-    },
-    "500": {
-      "example": {
-        "code": "INTERNAL_ERROR",
-        "message": "Internal error"
-      }
-    }
-  },
-  "refresh": {
-    "400": {
-      "invalidRequestBody": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid request body"
-      },
-      "invalidName": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid name"
-      },
-      "invalidEmail": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid email"
-      },
-      "passwordTooShort": {
-        "code": "BAD_REQUEST",
-        "message": "Password too short"
-      },
-      "passwordTooLong": {
-        "code": "BAD_REQUEST",
-        "message": "Password too long"
-      },
-      "invalidAccountType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account type"
-      },
-      "invalidAccountId": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account id"
-      },
-      "invalidAccountNumber": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account number"
-      },
-      "invalidRechargeType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid recharge type"
-      },
-      "invalidAmount": {
-        "code": "BAD_REQUEST",
-        "message": "Amount must be greater than zero"
-      },
-      "amountTooLarge": {
-        "code": "BAD_REQUEST",
-        "message": "Amount exceeds maximum"
-      },
-      "sameAccount": {
-        "code": "BAD_REQUEST",
-        "message": "Cannot transfer to the same account"
-      },
-      "invalidPagination": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid pagination"
-      },
-      "invalidIdempotencyKey": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid idempotency key"
-      }
-    },
-    "401": {
-      "example": {
-        "code": "INVALID_REFRESH_TOKEN",
-        "message": "Invalid refresh token"
-      }
-    },
-    "500": {
-      "example": {
-        "code": "INTERNAL_ERROR",
-        "message": "Internal error"
-      }
     }
   },
   "logout": {
-    "400": {
-      "invalidRequestBody": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid request body"
-      },
-      "invalidName": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid name"
-      },
-      "invalidEmail": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid email"
-      },
-      "passwordTooShort": {
-        "code": "BAD_REQUEST",
-        "message": "Password too short"
-      },
-      "passwordTooLong": {
-        "code": "BAD_REQUEST",
-        "message": "Password too long"
-      },
-      "invalidAccountType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account type"
-      },
-      "invalidAccountId": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account id"
-      },
-      "invalidAccountNumber": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account number"
-      },
-      "invalidRechargeType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid recharge type"
-      },
-      "invalidAmount": {
-        "code": "BAD_REQUEST",
-        "message": "Amount must be greater than zero"
-      },
-      "amountTooLarge": {
-        "code": "BAD_REQUEST",
-        "message": "Amount exceeds maximum"
-      },
-      "sameAccount": {
-        "code": "BAD_REQUEST",
-        "message": "Cannot transfer to the same account"
-      },
-      "invalidPagination": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid pagination"
-      },
-      "invalidIdempotencyKey": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid idempotency key"
-      }
-    },
     "401": {
       "unauthorized": {
         "code": "UNAUTHORIZED",
@@ -289,266 +31,6 @@ export const examples = {
       "invalidRefreshToken": {
         "code": "INVALID_REFRESH_TOKEN",
         "message": "Invalid refresh token"
-      }
-    },
-    "500": {
-      "example": {
-        "code": "INTERNAL_ERROR",
-        "message": "Internal error"
-      }
-    }
-  },
-  "createAccount": {
-    "400": {
-      "invalidRequestBody": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid request body"
-      },
-      "invalidName": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid name"
-      },
-      "invalidEmail": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid email"
-      },
-      "passwordTooShort": {
-        "code": "BAD_REQUEST",
-        "message": "Password too short"
-      },
-      "passwordTooLong": {
-        "code": "BAD_REQUEST",
-        "message": "Password too long"
-      },
-      "invalidAccountType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account type"
-      },
-      "invalidAccountId": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account id"
-      },
-      "invalidAccountNumber": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account number"
-      },
-      "invalidRechargeType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid recharge type"
-      },
-      "invalidAmount": {
-        "code": "BAD_REQUEST",
-        "message": "Amount must be greater than zero"
-      },
-      "amountTooLarge": {
-        "code": "BAD_REQUEST",
-        "message": "Amount exceeds maximum"
-      },
-      "sameAccount": {
-        "code": "BAD_REQUEST",
-        "message": "Cannot transfer to the same account"
-      },
-      "invalidPagination": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid pagination"
-      },
-      "invalidIdempotencyKey": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid idempotency key"
-      }
-    },
-    "401": {
-      "example": {
-        "code": "UNAUTHORIZED",
-        "message": "Missing or invalid token"
-      }
-    },
-    "403": {
-      "example": {
-        "code": "FORBIDDEN",
-        "message": "Access denied"
-      }
-    },
-    "500": {
-      "example": {
-        "code": "INTERNAL_ERROR",
-        "message": "Internal error"
-      }
-    }
-  },
-  "listMyAccounts": {
-    "401": {
-      "example": {
-        "code": "UNAUTHORIZED",
-        "message": "Missing or invalid token"
-      }
-    },
-    "403": {
-      "example": {
-        "code": "FORBIDDEN",
-        "message": "Access denied"
-      }
-    },
-    "500": {
-      "example": {
-        "code": "INTERNAL_ERROR",
-        "message": "Internal error"
-      }
-    }
-  },
-  "getAccount": {
-    "400": {
-      "invalidRequestBody": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid request body"
-      },
-      "invalidName": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid name"
-      },
-      "invalidEmail": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid email"
-      },
-      "passwordTooShort": {
-        "code": "BAD_REQUEST",
-        "message": "Password too short"
-      },
-      "passwordTooLong": {
-        "code": "BAD_REQUEST",
-        "message": "Password too long"
-      },
-      "invalidAccountType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account type"
-      },
-      "invalidAccountId": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account id"
-      },
-      "invalidAccountNumber": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account number"
-      },
-      "invalidRechargeType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid recharge type"
-      },
-      "invalidAmount": {
-        "code": "BAD_REQUEST",
-        "message": "Amount must be greater than zero"
-      },
-      "amountTooLarge": {
-        "code": "BAD_REQUEST",
-        "message": "Amount exceeds maximum"
-      },
-      "sameAccount": {
-        "code": "BAD_REQUEST",
-        "message": "Cannot transfer to the same account"
-      },
-      "invalidPagination": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid pagination"
-      },
-      "invalidIdempotencyKey": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid idempotency key"
-      }
-    },
-    "401": {
-      "example": {
-        "code": "UNAUTHORIZED",
-        "message": "Missing or invalid token"
-      }
-    },
-    "404": {
-      "example": {
-        "code": "NOT_FOUND",
-        "message": "Account not found"
-      }
-    },
-    "500": {
-      "example": {
-        "code": "INTERNAL_ERROR",
-        "message": "Internal error"
-      }
-    }
-  },
-  "listMovements": {
-    "400": {
-      "invalidRequestBody": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid request body"
-      },
-      "invalidName": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid name"
-      },
-      "invalidEmail": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid email"
-      },
-      "passwordTooShort": {
-        "code": "BAD_REQUEST",
-        "message": "Password too short"
-      },
-      "passwordTooLong": {
-        "code": "BAD_REQUEST",
-        "message": "Password too long"
-      },
-      "invalidAccountType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account type"
-      },
-      "invalidAccountId": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account id"
-      },
-      "invalidAccountNumber": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account number"
-      },
-      "invalidRechargeType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid recharge type"
-      },
-      "invalidAmount": {
-        "code": "BAD_REQUEST",
-        "message": "Amount must be greater than zero"
-      },
-      "amountTooLarge": {
-        "code": "BAD_REQUEST",
-        "message": "Amount exceeds maximum"
-      },
-      "sameAccount": {
-        "code": "BAD_REQUEST",
-        "message": "Cannot transfer to the same account"
-      },
-      "invalidPagination": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid pagination"
-      },
-      "invalidIdempotencyKey": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid idempotency key"
-      }
-    },
-    "401": {
-      "example": {
-        "code": "UNAUTHORIZED",
-        "message": "Missing or invalid token"
-      }
-    },
-    "404": {
-      "example": {
-        "code": "NOT_FOUND",
-        "message": "Account not found"
-      }
-    },
-    "500": {
-      "example": {
-        "code": "INTERNAL_ERROR",
-        "message": "Internal error"
       }
     }
   },
@@ -563,88 +45,6 @@ export const examples = {
           "rechargeType": "salary"
         },
         "createdAt": "2026-11-09T14:30:00.000Z"
-      }
-    },
-    "400": {
-      "invalidRequestBody": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid request body"
-      },
-      "invalidName": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid name"
-      },
-      "invalidEmail": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid email"
-      },
-      "passwordTooShort": {
-        "code": "BAD_REQUEST",
-        "message": "Password too short"
-      },
-      "passwordTooLong": {
-        "code": "BAD_REQUEST",
-        "message": "Password too long"
-      },
-      "invalidAccountType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account type"
-      },
-      "invalidAccountId": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account id"
-      },
-      "invalidAccountNumber": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account number"
-      },
-      "invalidRechargeType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid recharge type"
-      },
-      "invalidAmount": {
-        "code": "BAD_REQUEST",
-        "message": "Amount must be greater than zero"
-      },
-      "amountTooLarge": {
-        "code": "BAD_REQUEST",
-        "message": "Amount exceeds maximum"
-      },
-      "sameAccount": {
-        "code": "BAD_REQUEST",
-        "message": "Cannot transfer to the same account"
-      },
-      "invalidPagination": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid pagination"
-      },
-      "invalidIdempotencyKey": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid idempotency key"
-      }
-    },
-    "401": {
-      "example": {
-        "code": "UNAUTHORIZED",
-        "message": "Missing or invalid token"
-      }
-    },
-    "403": {
-      "example": {
-        "code": "FORBIDDEN",
-        "message": "Access denied"
-      }
-    },
-    "404": {
-      "example": {
-        "code": "NOT_FOUND",
-        "message": "Account not found"
-      }
-    },
-    "409": {
-      "example": {
-        "code": "IDEMPOTENCY_REQUEST_IN_PROGRESS",
-        "message": "Request with this idempotency key is in progress"
       }
     },
     "422": {
@@ -667,12 +67,6 @@ export const examples = {
       "keyReused": {
         "code": "IDEMPOTENCY_KEY_REUSED",
         "message": "Idempotency key already used with a different request"
-      }
-    },
-    "500": {
-      "example": {
-        "code": "INTERNAL_ERROR",
-        "message": "Internal error"
       }
     }
   },
@@ -701,88 +95,6 @@ export const examples = {
         }
       }
     },
-    "400": {
-      "invalidRequestBody": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid request body"
-      },
-      "invalidName": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid name"
-      },
-      "invalidEmail": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid email"
-      },
-      "passwordTooShort": {
-        "code": "BAD_REQUEST",
-        "message": "Password too short"
-      },
-      "passwordTooLong": {
-        "code": "BAD_REQUEST",
-        "message": "Password too long"
-      },
-      "invalidAccountType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account type"
-      },
-      "invalidAccountId": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account id"
-      },
-      "invalidAccountNumber": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid account number"
-      },
-      "invalidRechargeType": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid recharge type"
-      },
-      "invalidAmount": {
-        "code": "BAD_REQUEST",
-        "message": "Amount must be greater than zero"
-      },
-      "amountTooLarge": {
-        "code": "BAD_REQUEST",
-        "message": "Amount exceeds maximum"
-      },
-      "sameAccount": {
-        "code": "BAD_REQUEST",
-        "message": "Cannot transfer to the same account"
-      },
-      "invalidPagination": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid pagination"
-      },
-      "invalidIdempotencyKey": {
-        "code": "BAD_REQUEST",
-        "message": "Invalid idempotency key"
-      }
-    },
-    "401": {
-      "example": {
-        "code": "UNAUTHORIZED",
-        "message": "Missing or invalid token"
-      }
-    },
-    "403": {
-      "example": {
-        "code": "FORBIDDEN",
-        "message": "Access denied"
-      }
-    },
-    "404": {
-      "example": {
-        "code": "NOT_FOUND",
-        "message": "Account not found"
-      }
-    },
-    "409": {
-      "example": {
-        "code": "IDEMPOTENCY_REQUEST_IN_PROGRESS",
-        "message": "Request with this idempotency key is in progress"
-      }
-    },
     "422": {
       "insufficientFunds": {
         "code": "INSUFFICIENT_FUNDS",
@@ -796,12 +108,104 @@ export const examples = {
         "code": "IDEMPOTENCY_KEY_REUSED",
         "message": "Idempotency key already used with a different request"
       }
+    }
+  }
+} as const
+
+// Respuestas compartidas por varias operaciones: examples de BadRequest, Unauthorized, etc.
+export const sharedExamples = {
+  "BadRequest": {
+    "invalidRequestBody": {
+      "code": "BAD_REQUEST",
+      "message": "Invalid request body"
     },
-    "500": {
-      "example": {
-        "code": "INTERNAL_ERROR",
-        "message": "Internal error"
-      }
+    "invalidName": {
+      "code": "BAD_REQUEST",
+      "message": "Invalid name"
+    },
+    "invalidEmail": {
+      "code": "BAD_REQUEST",
+      "message": "Invalid email"
+    },
+    "passwordTooShort": {
+      "code": "BAD_REQUEST",
+      "message": "Password too short"
+    },
+    "passwordTooLong": {
+      "code": "BAD_REQUEST",
+      "message": "Password too long"
+    },
+    "invalidAccountType": {
+      "code": "BAD_REQUEST",
+      "message": "Invalid account type"
+    },
+    "invalidAccountId": {
+      "code": "BAD_REQUEST",
+      "message": "Invalid account id"
+    },
+    "invalidAccountNumber": {
+      "code": "BAD_REQUEST",
+      "message": "Invalid account number"
+    },
+    "invalidRechargeType": {
+      "code": "BAD_REQUEST",
+      "message": "Invalid recharge type"
+    },
+    "invalidAmount": {
+      "code": "BAD_REQUEST",
+      "message": "Amount must be greater than zero"
+    },
+    "amountTooLarge": {
+      "code": "BAD_REQUEST",
+      "message": "Amount exceeds maximum"
+    },
+    "sameAccount": {
+      "code": "BAD_REQUEST",
+      "message": "Cannot transfer to the same account"
+    },
+    "invalidPagination": {
+      "code": "BAD_REQUEST",
+      "message": "Invalid pagination"
+    },
+    "invalidIdempotencyKey": {
+      "code": "BAD_REQUEST",
+      "message": "Invalid idempotency key"
+    }
+  },
+  "InternalError": {
+    "example": {
+      "code": "INTERNAL_ERROR",
+      "message": "Internal error"
+    }
+  },
+  "InvalidRefreshToken": {
+    "example": {
+      "code": "INVALID_REFRESH_TOKEN",
+      "message": "Invalid refresh token"
+    }
+  },
+  "Unauthorized": {
+    "example": {
+      "code": "UNAUTHORIZED",
+      "message": "Missing or invalid token"
+    }
+  },
+  "Forbidden": {
+    "example": {
+      "code": "FORBIDDEN",
+      "message": "Access denied"
+    }
+  },
+  "AccountNotFound": {
+    "example": {
+      "code": "NOT_FOUND",
+      "message": "Account not found"
+    }
+  },
+  "IdempotencyInProgress": {
+    "example": {
+      "code": "IDEMPOTENCY_REQUEST_IN_PROGRESS",
+      "message": "Request with this idempotency key is in progress"
     }
   }
 } as const

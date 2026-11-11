@@ -1,3 +1,4 @@
+import type { Account } from '@/data/domain'
 import { expect, test } from '@/fixtures'
 
 test.describe('Accounts dashboard (real API)', () => {
@@ -18,7 +19,7 @@ test.describe('Accounts dashboard (real API)', () => {
 
     // Confirmar con la API que la cuenta existe en el backend y coincide con la pantalla
     const response = await customerAccountsApi.list()
-    const { items } = (await response.json()) as { items: { accountNumber: string; accountType: string; balance: number }[] }
+    const { items } = (await response.json()) as { items: Account[] }
     expect(items).toHaveLength(1)
     expect(items[0]).toMatchObject({ accountType: 'savings', balance: 0 })
     const shownNumber = (await dashboardUi.selectedNumber.textContent())?.replace(/\s/g, '')

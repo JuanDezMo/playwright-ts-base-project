@@ -1,5 +1,5 @@
 import { test as base } from '@playwright/test'
-import { AccountDetailLocators } from '../pages/account-detail'
+import { AccountDetailActions, AccountDetailLocators } from '../pages/account-detail'
 import { DashboardActions, DashboardLocators } from '../pages/dashboard'
 import { LoginActions, LoginLocators } from '../pages/login'
 import { OperatorActions, OperatorLocators } from '../pages/operator'
@@ -18,6 +18,7 @@ export type UiFixtures = {
   transferUi: TransferLocators
   transfer: TransferActions
   accountDetailUi: AccountDetailLocators
+  accountDetail: AccountDetailActions
 }
 
 // Fixtures de UI: Locators y Actions de cada pantalla, conectados entre sí.
@@ -54,5 +55,8 @@ export const test = base.extend<UiFixtures>({
   },
   accountDetailUi: async ({ page }, use) => {
     await use(new AccountDetailLocators(page))
+  },
+  accountDetail: async ({ page }, use) => {
+    await use(new AccountDetailActions(page))
   },
 })

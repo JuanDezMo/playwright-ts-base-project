@@ -1,3 +1,5 @@
+import { jsonOf } from '@/api/json'
+import type { Account } from '@/data/domain'
 import { expect, test } from '@/fixtures'
 
 test.describe('Recharge flow (real API)', () => {
@@ -10,9 +12,11 @@ test.describe('Recharge flow (real API)', () => {
   }) => {
     void asOperator
     // Preparar por API: el cliente (creado por la fixture) abre una cuenta de ahorros
-    const created = await customerAccountsApi.create('savings')
-    expect(created.status(), 'setup: create savings account').toBe(201)
-    const { accountNumber } = (await created.json()) as { accountNumber: string }
+    const { accountNumber } = await jsonOf<Account>(
+      await customerAccountsApi.create('savings'),
+      201,
+      'setup: create savings account',
+    )
 
     // Operador (página principal, sesión guardada): recarga por la UI
     await operator.goto()

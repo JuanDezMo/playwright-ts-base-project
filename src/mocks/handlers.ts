@@ -1,12 +1,14 @@
 import type { Page } from '@playwright/test'
 import type { components } from './api-types'
-import { examples } from './generated'
-import type { MockAccount } from './payloads'
+import { examples, sharedExamples } from './generated'
+import type { MockAccount, MockMovement } from './payloads'
 
 // Respuestas simuladas de la API con page.route (nativo de Playwright).
 // Los cuerpos salen de los ejemplos de openapi.yaml (pnpm gen:mocks) y se validan con
 // `satisfies` contra los tipos del contrato: si el contrato cambia, esto deja de compilar.
 // El frontend llama a /api/* (su proxy hacia la API Go), por eso el patrón empieza con **/api.
+
+const MOVEMENTS_PAGE_SIZE = 20
 
 type ApiError = components['schemas']['Error']
 type RechargeMovement = components['schemas']['RechargeMovement']
@@ -53,6 +55,29 @@ export const mockAccounts = {
     await page.route('**/api/accounts', (route) =>
       route.request().method() === 'GET' ? route.fulfill({ json: { items } }) : route.fallback(),
     )
+  },
+}
+
+export const mockAccountDetail = {
+  // GET /accounts/:id con la cuenta indicada
+  found: async (page: Page, account: MockAccount): Promise<void> => {
+    await page.route(`**/api/accounts/${account.id}`, (route) => route.fulfill({ json: account }))
+  },
+
+  // GET /accounts/:id → 404 (no existe o es ajena)
+  notFound: async (page: Page, accountId: string): Promise<void> => {
+    await page.route(`**/api/accounts/${accountId}`, (route) =>
+      route.fulfill({ status: 404, json: sharedExamples.AccountNotFound.example satisfies ApiError }),
+    )
+  },
+
+  // GET /accounts/:id/movements?page=N: parte la lista en páginas de 20, como la API
+  movements: async (page: Page, accountId: string, items: readonly MockMovement[]): Promise<void> => {
+    await page.route(new RegExp(`/api/accounts/${accountId}/movements(\\?.*)?$`), (route) => {
+      const number = Number(new URL(route.request().url()).searchParams.get('page') ?? '1')
+      const start = (number - 1) * MOVEMENTS_PAGE_SIZE
+      route.fulfill({ json: { page: number, pageSize: MOVEMENTS_PAGE_SIZE, items: items.slice(start, start + MOVEMENTS_PAGE_SIZE) } })
+    })
   },
 }
 
