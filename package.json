@@ -8,6 +8,7 @@
     "test": "playwright test",
     "test:api": "playwright test --project=api-component",
     "test:ui:component": "playwright test --project=ui-component",
+    "test:ui:e2e": "playwright test --project=ui-e2e",
     "typecheck": "tsc --noEmit",
     "report": "playwright show-report"
   },

@@ -81,6 +81,11 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 
 ## Iteración 3 · Login correcto: API y e2e (M)
 
+**Estado:** completada. Pruebas: API-AUTH-02 en `tests/api/component/auth/login.spec.ts`; E2E-00 y E2E-00b en `tests/ui/e2e/auth/operator-login.spec.ts`. Decisiones:
+
+- La verificación previa (3.5) quedó como **dos proyectos de setup** (`api-health` y `web-health`) en lugar de un `globalSetup`: cada tipo de prueba depende solo del servicio que usa (las de UI · componente no exigen la API).
+- La app guarda la sesión en **`sessionStorage`**, que `storageState()` no incluye. El setup `operator.auth.setup.ts` la lee con `page.evaluate` y la fixture `asOperator` la reinyecta con `page.addInitScript`.
+
 **Objetivo:** el camino feliz en dos niveles y la primera prueba contra el sistema completo.
 
 | #   | Tarea                                                                                                                            | Criterio de terminado                                                                                      |

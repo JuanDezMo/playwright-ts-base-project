@@ -71,7 +71,7 @@ playwright_base_project/
 │  └─ data/
 │     └─ factories.ts              # uniqueEmail(), cuentas, montos
 ├─ tests/                          # sección 6
-└─ .auth/                          # storageState por rol (en .gitignore)
+└─ .auth/                          # sesión guardada por rol (en .gitignore)
 ```
 
 ### Responsabilidad de cada capa
@@ -109,7 +109,7 @@ Flujo en cada tipo de prueba:
 | Tipo             | Preparar                                                                       | Actuar                             | Verificar                                                           |
 | ---------------- | ------------------------------------------------------------------------------ | ---------------------------------- | ------------------------------------------------------------------- |
 | UI · componente  | Fixture `mockApi` → `page.route`                                               | Actions de la pantalla             | Locators (`expect(ui.errorAlert).toHaveText(…)`)                    |
-| UI · e2e         | Fixtures de datos → clientes de API (crear cliente, recargar) → `storageState` | Actions de varias pantallas        | Locators y, si hace falta, clientes de API para confirmar el estado |
+| UI · e2e         | Fixtures de datos → clientes de API (crear cliente, recargar) → sesión guardada por rol | Actions de varias pantallas        | Locators y, si hace falta, clientes de API para confirmar el estado |
 | API · componente | Fixtures de datos y token                                                      | Un cliente de API                  | Estado, cuerpo y headers de la `Response`                           |
 | API · e2e        | Fixtures de datos y token                                                      | Varios clientes de API encadenados | Respuestas y reglas de negocio (saldo = suma de movimientos)        |
 
@@ -368,7 +368,7 @@ export default defineConfig({
 | Operador | Seed de la API: `operator@bank.local` / `Operator2026!`                                               |
 | Clientes | Creados por API en cada prueba con email único (`ana+<timestamp>-<worker>@mail.com`)                  |
 | Saldo    | `OperatorApi.recharge` (máximo 5 recargas y $3,000,000.00 por cuenta y día; efectivo hasta $3,000.00) |
-| Sesiones | `storageState` por rol desde `tests/setup` para las e2e de UI                                         |
+| Sesiones | Login una vez por rol en `tests/setup/*.auth.setup.ts`. La app usa `sessionStorage`, que `storageState` no guarda: se lee con `page.evaluate`, se guarda en `.auth/` y la fixture `asOperator` la reinyecta con `addInitScript` |
 
 ## 9. Iteraciones propuestas
 

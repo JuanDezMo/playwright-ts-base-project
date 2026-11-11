@@ -29,20 +29,22 @@ Completada en la iteración 2 (medido el 2026-11-10, Chromium 158, en local).
 
 ## Comparativa 2: login correcto del operador
 
+Completada en la iteración 3 (medido el 2026-11-10, Chromium 158, en local).
+
 | Criterio | API-AUTH-02 (API · componente) | E2E-00 (UI · e2e) |
 | --- | --- | --- |
-| Tipo de prueba | | |
-| Tiempo de ejecución (promedio de 5 ejecuciones) | | |
-| Líneas de la prueba (sin contar fixtures) | | |
-| Archivos que tuve que crear (Locators, Actions, mocks, clientes) | | |
-| ¿Necesita la API levantada? | | |
-| ¿Necesita el frontend levantado? | | |
-| ¿Deja estado en la base de datos? | | |
-| ¿Qué cambio la rompe? (mensaje, HTML, regla de negocio, contrato) | | |
-| ¿Qué error detecta que la otra no? | | |
-| ¿Es estable al repetirla 10 veces? | | |
+| Tipo de prueba | `POST /auth/login` directo y lectura del JWT | Login real en el navegador: frontend, proxy `/api` y API Go |
+| Tiempo de ejecución (promedio de 5 ejecuciones) | **84 ms** (78–89) | **1047 ms** (998–1144), unas 12 veces más |
+| Líneas de la prueba (sin contar fixtures) | 11 | 6 |
+| Archivos que tuve que crear | 1: `api/jwt.ts` (reutiliza `AuthApi`) | 2: `OperatorLocators` y `pages/operator/index`; además `loginAs` en `LoginActions` y los setups de verificación previa |
+| ¿Necesita la API levantada? | Sí | Sí |
+| ¿Necesita el frontend levantado? | No | Sí |
+| ¿Deja estado en la base de datos? | Sí: un refresh token nuevo por login | Sí: un refresh token nuevo por login |
+| ¿Qué cambio la rompe? | Cambiar `tokenType`, `expiresIn`, el claim `role` o la duración del token | Cambiar los labels del login, el heading "Operations", la ruta `/operator`, la redirección por rol o cómo se guarda la sesión |
+| ¿Qué error detecta que la otra no? | Que el token dure otra cosa que 900 s o lleve un rol incorrecto, aunque la UI funcione | Que el frontend no guarde la sesión, no lea el rol del token o no redirija; también un proxy `/api` mal configurado |
+| ¿Es estable al repetirla 10 veces? | Sí (10/10) | Sí (10/10) |
 
-**Conclusión** (2 o 3 líneas):
+**Conclusión:** la e2e tiene menos líneas porque las fixtures y Actions hacen el trabajo, pero es unas 12 veces más lenta y depende de todo el sistema. La de API verifica **el detalle de los datos** (claims, duración), que la e2e no ve. La e2e verifica **la integración**: que las piezas funcionan juntas. Conviene pocas e2e para los caminos críticos y muchas de API para los detalles.
 
 ## Comparativa 3: bloqueo tras 5 intentos
 

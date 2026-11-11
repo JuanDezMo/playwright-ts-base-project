@@ -18,4 +18,12 @@ export class LoginActions {
     await this.ui.password.fill(password)
     await this.ui.submitButton.click()
   }
+
+  // Login completo: abre la pantalla, envía las credenciales y espera a llegar
+  // a la página de inicio del rol (/accounts o /operator)
+  async loginAs(credentials: { email: string; password: string }, landingPath: string): Promise<void> {
+    await this.goto()
+    await this.signIn(credentials.email, credentials.password)
+    await this.page.waitForURL(`**${landingPath}`)
+  }
 }
