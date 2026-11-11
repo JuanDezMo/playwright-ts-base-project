@@ -1,0 +1,141 @@
+name: Tests
+
+# push: pruebas de componente (rápidas). pull_request: además las e2e en 2 shards.
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+  # Repositorios del sistema bajo prueba. Si son privados, define el secret STACK_REPOS_TOKEN
+  API_REPO: JuanDezMo/banking-laboratory-api
+  FRONTEND_REPO: JuanDezMo/banking-test-lab-frontend
+  DATABASE_URL: postgres://bank:bank@localhost:5432/bank?sslmode=disable
+  JWT_SECRET: ci-only-secret-with-at-least-32-characters
+
+jobs:
+  checks:
+    name: Static checks + smoke + component
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: bank
+          POSTGRES_PASSWORD: bank
+          POSTGRES_DB: bank
+          TZ: UTC
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U bank" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm exec playwright install --with-deps chromium
+
+      - uses: ./.github/actions/start-stack
+        with:
+          repos-token: ${{ secrets.STACK_REPOS_TOKEN || github.token }}
+          api-repo: ${{ env.API_REPO }}
+          frontend-repo: ${{ env.FRONTEND_REPO }}
+          database-url: ${{ env.DATABASE_URL }}
+          jwt-secret: ${{ env.JWT_SECRET }}
+
+      - name: Smoke
+        run: pnpm test:smoke
+      - name: API + UI component
+        run: pnpm exec playwright test --project=api-component --project=ui-component
+
+      - name: Timing summary
+        if: ${{ !cancelled() }}
+        run: node scripts/ci-summary.ts "Checks" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: checks-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: checks-service-logs
+          path: |
+            stack/api.log
+            stack/frontend.log
+
+  e2e:
+    name: E2E (shard ${{ matrix.shard }}/2)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: bank
+          POSTGRES_PASSWORD: bank
+          POSTGRES_DB: bank
+          TZ: UTC
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U bank" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+
+      - uses: ./.github/actions/start-stack
+        with:
+          repos-token: ${{ secrets.STACK_REPOS_TOKEN || github.token }}
+          api-repo: ${{ env.API_REPO }}
+          frontend-repo: ${{ env.FRONTEND_REPO }}
+          database-url: ${{ env.DATABASE_URL }}
+          jwt-secret: ${{ env.JWT_SECRET }}
+
+      - name: E2E (UI desktop, UI mobile, API)
+        run: >-
+          pnpm exec playwright test
+          --project=ui-e2e --project=ui-e2e-mobile --project=api-e2e
+          --shard=${{ matrix.shard }}/2
+
+      - name: Timing summary
+        if: ${{ !cancelled() }}
+        run: node scripts/ci-summary.ts "E2E shard ${{ matrix.shard }}/2" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: e2e-report-shard-${{ matrix.shard }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-service-logs-shard-${{ matrix.shard }}
+          path: |
+            stack/api.log
+            stack/frontend.log

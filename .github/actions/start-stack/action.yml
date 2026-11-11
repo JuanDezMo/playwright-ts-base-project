@@ -1,0 +1,72 @@
+name: Start stack
+description: Compila y arranca la API Go y el frontend (PostgreSQL llega como service del job) y espera a que respondan.
+
+inputs:
+  repos-token:
+    description: Token para clonar los repositorios de la API y del frontend
+    required: true
+  api-repo:
+    required: true
+  frontend-repo:
+    required: true
+  database-url:
+    required: true
+  jwt-secret:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout API
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.api-repo }}
+        token: ${{ inputs.repos-token }}
+        path: stack/api
+
+    - name: Checkout frontend
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.frontend-repo }}
+        token: ${{ inputs.repos-token }}
+        path: stack/frontend
+
+    - uses: actions/setup-go@v5
+      with:
+        go-version-file: stack/api/go.mod
+        cache-dependency-path: stack/api/go.sum
+
+    - name: Start API
+      shell: bash
+      working-directory: stack/api
+      env:
+        DATABASE_URL: ${{ inputs.database-url }}
+        JWT_SECRET: ${{ inputs.jwt-secret }}
+      run: |
+        go build -o ../api-server .
+        nohup ../api-server > ../api.log 2>&1 &
+        # La API crea las tablas al arrancar: el seed del operador va después
+        for i in $(seq 1 30); do
+          curl -s -o /dev/null http://localhost:3000/x && break
+          sleep 1
+        done
+        curl -s -o /dev/null http://localhost:3000/x || { cat ../api.log; exit 1; }
+        psql "$DATABASE_URL" -f seeds/operators.sql
+
+    - uses: pnpm/action-setup@v4
+      with:
+        package_json_file: stack/frontend/package.json
+        run_install: false
+
+    - name: Start frontend
+      shell: bash
+      working-directory: stack/frontend
+      run: |
+        pnpm install --frozen-lockfile
+        nohup pnpm dev --host 127.0.0.1 > ../frontend.log 2>&1 &
+        for i in $(seq 1 60); do
+          curl -s -o /dev/null http://localhost:5173 && exit 0
+          sleep 1
+        done
+        cat ../frontend.log
+        exit 1

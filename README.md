@@ -65,6 +65,10 @@ Before the tests, `api-health` and `web-health` check that the services are up a
 | `pnpm report` | Open the last HTML report |
 
 
+## Continuous integration
+
+`.github/workflows/tests.yml`: every push runs typecheck, lint, `test:smoke` and the component projects; pull requests also run the e2e projects in 2 shards. The workflow clones and starts the API (with PostgreSQL) and the frontend. If those repos are private, add a `STACK_REPOS_TOKEN` secret. Timings appear in the job summary; the HTML report and traces are uploaded as artifacts.
+
 ## Structure
 
 ```

@@ -218,6 +218,13 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 
 ## Iteración 11 · Integración continua (M)
 
+**Estado:** implementada, pendiente de verificar en GitHub. Workflow `.github/workflows/tests.yml` y acción compuesta `.github/actions/start-stack` (clona, compila y arranca API y frontend). Decisiones:
+
+- El sistema bajo prueba vive en otros dos repositorios: se clonan con `actions/checkout` (secret opcional `STACK_REPOS_TOKEN` si son privados). PostgreSQL es un `service` del job y el operador se carga con `seeds/operators.sql` tras arrancar la API.
+- Job `checks` (cada push y PR): typecheck, lint, `test:smoke`, `api-component` y `ui-component`. Job `e2e` (solo PR): `ui-e2e`, `ui-e2e-mobile` y `api-e2e` en 2 shards.
+- `retries: 2` ya estaba en `playwright.config.ts` para CI; el reporter JSON alimenta `scripts/ci-summary.ts`, que escribe los tiempos en el resumen del job.
+- Se suben `playwright-report/` y `test-results/` (trazas) siempre, y los logs de la API y del frontend si el job falla.
+
 | #    | Tarea                                                                                  | Criterio de terminado                             |
 | ---- | -------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | 11.1 | Workflow de GitHub Actions que levanta PostgreSQL, la API y el frontend                | El job queda en verde con `test:smoke`            |
