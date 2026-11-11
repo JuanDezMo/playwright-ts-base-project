@@ -1,17 +1,20 @@
 import type { Locator, Page } from '@playwright/test'
 
+type MovementType = 'recharge' | 'transfer_in' | 'transfer_out'
+
 // Detalle de una cuenta (/accounts/:id) con su historial
 export class AccountDetailLocators {
   readonly balance: Locator
-  readonly movementsTable: Locator
+  readonly movementsSection: Locator
 
   constructor(page: Page) {
     this.balance = page.getByTestId('account-detail-balance')
-    this.movementsTable = page.getByTestId('movements-table')
+    this.movementsSection = page.getByTestId('movements-section')
   }
 
-  // Filas del historial de un tipo (data-movement-type="transfer_out"...)
-  movementsOfType(type: 'recharge' | 'transfer_in' | 'transfer_out'): Locator {
-    return this.movementsTable.locator(`tbody tr[data-movement-type="${type}"]`)
+  // Movimientos de un tipo. La app muestra una tabla en escritorio y una lista en móvil
+  // (la otra queda oculta con CSS): se filtran los visibles para que sirva en ambos.
+  movementsOfType(type: MovementType): Locator {
+    return this.movementsSection.locator(`[data-movement-type="${type}"]`).filter({ visible: true })
   }
 }

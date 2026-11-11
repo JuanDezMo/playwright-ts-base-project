@@ -17,4 +17,9 @@ export class AccountsApi {
   getById(id: string): Promise<APIResponse> {
     return this.client.get(`/accounts/${encodeURIComponent(id)}`)
   }
+
+  // Historial paginado (20 por página, más reciente primero)
+  movements(id: string, page = 1): Promise<APIResponse> {
+    return this.client.get(`/accounts/${encodeURIComponent(id)}/movements`, { params: { page } })
+  }
 }

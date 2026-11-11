@@ -2,7 +2,7 @@ import { env } from '@/config/env'
 import { expect, test } from '@/fixtures'
 
 test.describe('Operator login (real API)', () => {
-  test('E2E-00 the seeded operator signs in and lands on Operations', async ({ page, login, operatorUi }) => {
+  test('E2E-00 the seeded operator signs in and lands on Operations', { tag: '@smoke' }, async ({ page, login, operatorUi }) => {
     await login.goto()
     await login.signIn(env.operator.email, env.operator.password)
 

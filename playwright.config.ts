@@ -48,5 +48,19 @@ export default defineConfig({
       dependencies: ['auth-setup'],
       use: { ...devices['Desktop Chrome'], baseURL: env.baseUrl },
     },
+    {
+      // Las mismas e2e de UI en un teléfono (viewport, táctil y user agent de Pixel 7)
+      name: 'ui-e2e-mobile',
+      testDir: './tests/ui/e2e',
+      dependencies: ['auth-setup'],
+      use: { ...devices['Pixel 7'], baseURL: env.baseUrl },
+    },
+    {
+      // Flujos de negocio entre varios endpoints, sin navegador
+      name: 'api-e2e',
+      testDir: './tests/api/e2e',
+      dependencies: ['api-health'],
+      use: { baseURL: env.apiUrl },
+    },
   ],
 })

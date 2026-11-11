@@ -6,9 +6,11 @@
   "description": "Automated tests (Playwright) for the Banking Test Lab web app and Go API",
   "scripts": {
     "test": "playwright test",
-    "test:api": "playwright test --project=api-component",
+    "test:api": "playwright test --project=api-component --project=api-e2e",
     "test:ui:component": "playwright test --project=ui-component",
     "test:ui:e2e": "playwright test --project=ui-e2e",
+    "test:ui:mobile": "playwright test --project=ui-e2e-mobile",
+    "test:smoke": "playwright test --grep @smoke --project=api-component --project=api-e2e --project=ui-component --project=ui-e2e",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "gen:mocks": "node scripts/gen-mocks.ts && pnpm gen:types",

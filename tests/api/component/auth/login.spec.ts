@@ -15,7 +15,7 @@ test.describe('POST /auth/login', () => {
     })
   })
 
-  test('API-AUTH-02 returns a token pair for the seeded operator', async ({ authApi }) => {
+  test('API-AUTH-02 returns a token pair for the seeded operator', { tag: '@smoke' }, async ({ authApi }) => {
     const response = await authApi.login(env.operator.email, env.operator.password)
 
     expect(response.status()).toBe(200)

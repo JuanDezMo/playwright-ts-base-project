@@ -204,6 +204,12 @@ Tamaño estimado: **S** ≈ media jornada, **M** ≈ una jornada.
 
 ## Iteración 10 · API e2e, smoke y móvil (M)
 
+**Estado:** completada. Decisiones:
+
+- API-E2E-01 (`tests/api/e2e/money-flow.spec.ts`): dos cuentas → recarga → transferencia; para cada cuenta, el saldo coincide con la suma firmada de sus movimientos (RN-17). Se agregó `AccountsApi.movements(id, page)`.
+- `@smoke` con la opción `tag` de Playwright en API-AUTH-02, C-03, E2E-00 y API-E2E-01. `pnpm test:smoke` limita los proyectos para no repetir la e2e en móvil (4 pruebas).
+- Proyecto `ui-e2e-mobile` (Pixel 7). En móvil el historial es una lista y en escritorio una tabla (la otra se oculta con CSS): `AccountDetailLocators.movementsOfType` busca `[data-movement-type]` en toda la sección y se queda con los visibles (`filter({ visible: true })`).
+
 | #    | Tarea                                                                                                                   | Criterio de terminado                  |
 | ---- | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
 | 10.1 | Proyecto `api-e2e` y API-E2E-01: registro → cuenta → recarga → transferencia → saldo igual a la suma de los movimientos | Pasa con `pnpm test:api`            |

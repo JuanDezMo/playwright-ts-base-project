@@ -25,7 +25,8 @@ Automated tests with [Playwright](https://playwright.dev) for **Banking Test Lab
 | 7 · Recharge | ✅ Done: OperatorApi, operator page objects, fake session, C-07, C-08, E2E-02 (two browser contexts), API-RCH-01 |
 | 8 · Transfer | ✅ Done: TransfersApi, transfer/dialog/detail page objects, `customerWithFunds`, C-05, C-06, E2E-03, API-TRF-01 |
 | 9 · Mocks from OpenAPI | ✅ Done: `pnpm gen:mocks`, typed examples with `satisfies`, ESLint layer rules |
-| 10 · API e2e, smoke and mobile | Next |
+| 10 · API e2e, smoke and mobile | ✅ Done: API-E2E-01, `@smoke` tags, `ui-e2e-mobile` (Pixel 7) |
+| 11 · Continuous integration | Next |
 
 ## Requirements
 
@@ -53,21 +54,22 @@ Before the tests, `api-health` and `web-health` check that the services are up a
 | Script | Description |
 | --- | --- |
 | `pnpm test` | Run every project |
-| `pnpm test:api` | API component tests (no browser) |
+| `pnpm test:api` | API tests: component and e2e (no browser) |
 | `pnpm test:ui:component` | UI component tests (needs the web app, not the API) |
 | `pnpm test:ui:e2e` | UI end-to-end tests (needs the web app and the API) |
+| `pnpm test:ui:mobile` | The same UI e2e tests on a Pixel 7 |
+| `pnpm test:smoke` | One critical test per type (`@smoke`) |
 | `pnpm typecheck` | TypeScript check |
 | `pnpm lint` | ESLint, including the layer dependency rules |
 | `pnpm gen:mocks` | Regenerate `src/mocks/generated` and `src/mocks/api-types.ts` from `../accounts_api/openapi.yaml` (`OPENAPI_PATH` to override) |
 | `pnpm report` | Open the last HTML report |
 
-More scripts are added per iteration (`test:smoke`...).
 
 ## Structure
 
 ```
 playwright_base_project/
-├─ playwright.config.ts     # health checks + auth setup, then api-component, ui-component, ui-e2e
+├─ playwright.config.ts     # health checks + auth setup, then api-component, api-e2e, ui-component, ui-e2e, ui-e2e-mobile
 ├─ src/
 │  ├─ config/               # env.ts (URLs, seed credentials), sessions.ts (saved session files)
 │  ├─ api/                  # API clients: Auth, Accounts, Operator, Transfers (+ ApiClient, jwt)
